@@ -121,7 +121,7 @@ a {
 .toolbar-band {
   z-index: 20;
   display: grid;
-  grid-template-columns: minmax(220px, 1fr) minmax(190px, 280px) 52px;
+  grid-template-columns: minmax(260px, 1fr) minmax(280px, 1fr) 52px;
   gap: 10px;
   margin: 10px 0;
   padding: 8px;
@@ -1358,7 +1358,8 @@ a {
   }
 
   .toolbar-band {
-    width: 700px;
+    width: min(100%, 760px);
+    margin-right: auto;
     margin-left: auto;
   }
 }
@@ -1391,11 +1392,11 @@ a {
   }
 
   .toolbar-band {
-    width: calc(100vw - 16px);
+    width: calc(100vw - 24px);
     max-width: 100%;
-    grid-template-columns: minmax(78px, .8fr) 54px minmax(0, 1fr) 34px;
+    grid-template-columns: 86px 70px minmax(0, 1fr) 32px;
     gap: 5px;
-    margin: 6px 0;
+    margin: 6px auto 0;
     padding: 5px;
     border-radius: 12px;
   }
@@ -1419,7 +1420,7 @@ a {
   }
 
   #generate-map::after {
-    content: "生成";
+    content: "生成图片";
     font-size: 13px;
   }
 
@@ -1443,7 +1444,7 @@ a {
 
   .tag-toggle span::after {
     content: "标签";
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .tag-toggle input {
@@ -1468,7 +1469,7 @@ a {
 
   #reset-map {
     order: 4;
-    width: 34px;
+    width: 32px;
     min-width: 0;
     min-height: 36px;
     border-width: 2.5px;
