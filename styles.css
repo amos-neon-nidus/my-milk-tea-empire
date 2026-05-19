@@ -1497,12 +1497,12 @@ a {
 
   .tag-toggle input {
     position: absolute;
-    left: 7px;
+    left: 4px;
     top: 50%;
     z-index: 1;
     transform: translateY(-50%);
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
   }
 
   .brand-search {
