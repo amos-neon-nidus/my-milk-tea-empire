@@ -8,6 +8,6 @@ window.MILK_TEA_SITE_CONFIG = {
   studioUrl: "",
   githubLabel: "GitHub",
   githubUrl: "",
-  shareQrTitle: "扫码生成你的奶茶版图",
+  shareFooterTitle: "保存图片，邀请朋友开图",
   shareTrustLine: "网页打开，不登录，不收集微信信息"
 };

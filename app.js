@@ -10,7 +10,7 @@
     studioUrl: "",
     githubLabel: "GitHub",
     githubUrl: "",
-    shareQrTitle: "扫码生成你的奶茶版图",
+    shareFooterTitle: "保存图片，邀请朋友开图",
     shareTrustLine: "网页打开，不登录，不收集微信信息",
     ...(window.MILK_TEA_SITE_CONFIG || {})
   };
@@ -2448,25 +2448,16 @@
   function drawShareTrustFooter(ctx) {
     const shareUrl = getShareUrl();
     const displayUrl = formatShareUrlForCanvas(shareUrl);
-    const qrSize = 160;
-    const qrX = 858;
-    const qrY = 1736;
 
     ctx.save();
     ctx.fillStyle = "#15110f";
     ctx.font = "900 30px Microsoft YaHei UI, sans-serif";
-    ctx.fillText(siteConfig.shareQrTitle || "扫码生成你的奶茶版图", 58, 1760);
+    ctx.fillText(siteConfig.shareFooterTitle || "保存图片，邀请朋友开图", 58, 1760);
     ctx.fillStyle = "rgba(21, 17, 15, .62)";
     ctx.font = "900 22px Microsoft YaHei UI, sans-serif";
     ctx.fillText(siteConfig.shareTrustLine || "网页打开，不登录，不收集微信信息", 58, 1794);
-    ctx.fillText("非官方娱乐向小工具", 58, 1828);
-    wrapText(ctx, displayUrl, 58, 1860, 760, 27, "900 22px Microsoft YaHei UI, sans-serif", "rgba(21, 17, 15, .62)");
-
-    try {
-      drawQrCode(ctx, createQrMatrix(shareUrl), qrX, qrY, qrSize);
-    } catch (error) {
-      drawQrFallback(ctx, displayUrl, qrX, qrY, qrSize);
-    }
+    ctx.fillText("非官方娱乐向小工具 · 分享时可附上网址", 58, 1828);
+    wrapText(ctx, displayUrl, 58, 1864, 964, 30, "900 25px Microsoft YaHei UI, sans-serif", "rgba(21, 17, 15, .72)");
     ctx.restore();
   }
 
@@ -2490,261 +2481,6 @@
     } catch (error) {
       return String(url || "").replace(/^https?:\/\//, "").replace(/\/$/, "");
     }
-  }
-
-  function drawQrFallback(ctx, text, x, y, size) {
-    ctx.fillStyle = "#fffdf5";
-    ctx.strokeStyle = "#15110f";
-    ctx.lineWidth = 4;
-    roundRect(ctx, x, y, size, size, 12, true, true);
-    ctx.fillStyle = "#15110f";
-    ctx.font = "900 16px Microsoft YaHei UI, sans-serif";
-    wrapText(ctx, text, x + 10, y + 34, size - 20, 18, "900 14px Microsoft YaHei UI, sans-serif");
-  }
-
-  function drawQrCode(ctx, matrix, x, y, size) {
-    const quiet = 4;
-    const count = matrix.length;
-    const moduleSize = size / (count + quiet * 2);
-
-    ctx.fillStyle = "#fffdf5";
-    ctx.strokeStyle = "#15110f";
-    ctx.lineWidth = 4;
-    roundRect(ctx, x, y, size, size, 10, true, true);
-    ctx.fillStyle = "#15110f";
-    matrix.forEach((row, rowIndex) => {
-      row.forEach((dark, columnIndex) => {
-        if (!dark) return;
-        ctx.fillRect(
-          x + (columnIndex + quiet) * moduleSize,
-          y + (rowIndex + quiet) * moduleSize,
-          Math.ceil(moduleSize),
-          Math.ceil(moduleSize)
-        );
-      });
-    });
-  }
-
-  function createQrMatrix(text) {
-    const bytes = new TextEncoder().encode(String(text || ""));
-    const versions = [
-      { version: 1, dataCodewords: 19, ecCodewords: 7, align: [] },
-      { version: 2, dataCodewords: 34, ecCodewords: 10, align: [6, 18] },
-      { version: 3, dataCodewords: 55, ecCodewords: 15, align: [6, 22] },
-      { version: 4, dataCodewords: 80, ecCodewords: 20, align: [6, 26] },
-      { version: 5, dataCodewords: 108, ecCodewords: 26, align: [6, 30] }
-    ];
-    const qrConfig = versions.find((item) => getQrPayloadBitLength(bytes.length) <= item.dataCodewords * 8);
-    if (!qrConfig) throw new Error("QR payload is too long");
-
-    const size = qrConfig.version * 4 + 17;
-    const modules = Array.from({ length: size }, () => Array(size).fill(false));
-    const isFunction = Array.from({ length: size }, () => Array(size).fill(false));
-
-    function setFunctionModule(x, y, dark) {
-      if (x < 0 || y < 0 || x >= size || y >= size) return;
-      modules[y][x] = dark;
-      isFunction[y][x] = true;
-    }
-
-    drawQrFunctionPatterns(qrConfig, setFunctionModule, size);
-    reserveQrFormatAreas(isFunction, size);
-
-    const dataCodewords = createQrDataCodewords(bytes, qrConfig.dataCodewords);
-    const allCodewords = dataCodewords.concat(createQrErrorCorrection(dataCodewords, qrConfig.ecCodewords));
-    drawQrCodewords(modules, isFunction, allCodewords, size);
-    drawQrFormatBits(modules, isFunction, size, 0);
-    return modules;
-  }
-
-  function getQrPayloadBitLength(byteLength) {
-    return 4 + 8 + byteLength * 8 + 4;
-  }
-
-  function createQrDataCodewords(bytes, dataCodewordCount) {
-    const bits = [];
-    appendQrBits(bits, 0x4, 4);
-    appendQrBits(bits, bytes.length, 8);
-    bytes.forEach((byte) => appendQrBits(bits, byte, 8));
-
-    const capacity = dataCodewordCount * 8;
-    appendQrBits(bits, 0, Math.min(4, capacity - bits.length));
-    while (bits.length % 8) bits.push(0);
-
-    const codewords = [];
-    for (let index = 0; index < bits.length; index += 8) {
-      codewords.push(bits.slice(index, index + 8).reduce((value, bit) => (value << 1) | bit, 0));
-    }
-    for (let pad = 0xec; codewords.length < dataCodewordCount; pad ^= 0xfd) {
-      codewords.push(pad);
-    }
-    return codewords;
-  }
-
-  function appendQrBits(bits, value, length) {
-    for (let index = length - 1; index >= 0; index -= 1) {
-      bits.push((value >>> index) & 1);
-    }
-  }
-
-  function drawQrFunctionPatterns(config, setFunctionModule, size) {
-    [[0, 0], [size - 7, 0], [0, size - 7]].forEach(([x, y]) => {
-      drawQrFinderPattern(setFunctionModule, x, y, size);
-    });
-
-    for (let index = 8; index < size - 8; index += 1) {
-      const dark = index % 2 === 0;
-      setFunctionModule(index, 6, dark);
-      setFunctionModule(6, index, dark);
-    }
-
-    config.align.forEach((x) => {
-      config.align.forEach((y) => {
-        if ((x === 6 && y === 6) || (x === 6 && y === size - 7) || (x === size - 7 && y === 6)) return;
-        drawQrAlignmentPattern(setFunctionModule, x, y);
-      });
-    });
-
-    setFunctionModule(8, config.version * 4 + 9, true);
-  }
-
-  function drawQrFinderPattern(setFunctionModule, left, top, size) {
-    for (let y = -1; y <= 7; y += 1) {
-      for (let x = -1; x <= 7; x += 1) {
-        const xx = left + x;
-        const yy = top + y;
-        if (xx < 0 || yy < 0 || xx >= size || yy >= size) continue;
-        const dark = x >= 0 && x <= 6 && y >= 0 && y <= 6
-          && (x === 0 || x === 6 || y === 0 || y === 6 || (x >= 2 && x <= 4 && y >= 2 && y <= 4));
-        setFunctionModule(xx, yy, dark);
-      }
-    }
-  }
-
-  function drawQrAlignmentPattern(setFunctionModule, centerX, centerY) {
-    for (let y = -2; y <= 2; y += 1) {
-      for (let x = -2; x <= 2; x += 1) {
-        const distance = Math.max(Math.abs(x), Math.abs(y));
-        setFunctionModule(centerX + x, centerY + y, distance === 2 || distance === 0);
-      }
-    }
-  }
-
-  function reserveQrFormatAreas(isFunction, size) {
-    for (let index = 0; index < 9; index += 1) {
-      if (index !== 6) {
-        isFunction[8][index] = true;
-        isFunction[index][8] = true;
-      }
-    }
-    for (let index = 0; index < 8; index += 1) {
-      isFunction[8][size - 1 - index] = true;
-      isFunction[size - 1 - index][8] = true;
-    }
-  }
-
-  function drawQrCodewords(modules, isFunction, codewords, size) {
-    const bits = [];
-    codewords.forEach((codeword) => appendQrBits(bits, codeword, 8));
-    let bitIndex = 0;
-    let upward = true;
-
-    for (let right = size - 1; right >= 1; right -= 2) {
-      if (right === 6) right -= 1;
-      for (let vertical = 0; vertical < size; vertical += 1) {
-        const y = upward ? size - 1 - vertical : vertical;
-        for (let column = 0; column < 2; column += 1) {
-          const x = right - column;
-          if (isFunction[y][x]) continue;
-          let dark = bitIndex < bits.length ? Boolean(bits[bitIndex]) : false;
-          bitIndex += 1;
-          if ((x + y) % 2 === 0) dark = !dark;
-          modules[y][x] = dark;
-        }
-      }
-      upward = !upward;
-    }
-  }
-
-  function drawQrFormatBits(modules, isFunction, size, mask) {
-    const bits = getQrFormatBits(mask);
-    const set = (x, y, index) => {
-      modules[y][x] = Boolean((bits >>> index) & 1);
-      isFunction[y][x] = true;
-    };
-
-    for (let index = 0; index <= 5; index += 1) set(8, index, index);
-    set(8, 7, 6);
-    set(8, 8, 7);
-    set(7, 8, 8);
-    for (let index = 9; index < 15; index += 1) set(14 - index, 8, index);
-    for (let index = 0; index < 8; index += 1) set(size - 1 - index, 8, index);
-    for (let index = 8; index < 15; index += 1) set(8, size - 15 + index, index);
-  }
-
-  function getQrFormatBits(mask) {
-    const errorCorrectionLow = 1;
-    const dataBits = (errorCorrectionLow << 3) | mask;
-    let remainder = dataBits;
-    for (let index = 0; index < 10; index += 1) {
-      remainder = (remainder << 1) ^ (((remainder >>> 9) & 1) ? 0x537 : 0);
-    }
-    return ((dataBits << 10) | remainder) ^ 0x5412;
-  }
-
-  function createQrErrorCorrection(dataCodewords, ecCodewordCount) {
-    const generator = createQrGenerator(ecCodewordCount);
-    const remainder = Array(ecCodewordCount).fill(0);
-    dataCodewords.forEach((codeword) => {
-      const factor = codeword ^ remainder.shift();
-      remainder.push(0);
-      generator.forEach((coefficient, index) => {
-        remainder[index] ^= multiplyQrField(coefficient, factor);
-      });
-    });
-    return remainder;
-  }
-
-  function createQrGenerator(degree) {
-    let result = [1];
-    for (let degreeIndex = 0; degreeIndex < degree; degreeIndex += 1) {
-      const next = Array(result.length + 1).fill(0);
-      result.forEach((coefficient, index) => {
-        next[index] ^= multiplyQrField(coefficient, getQrExp(degreeIndex));
-        next[index + 1] ^= coefficient;
-      });
-      result = next;
-    }
-    return result.slice(1);
-  }
-
-  function multiplyQrField(a, b) {
-    if (!a || !b) return 0;
-    return getQrExp(getQrLog(a) + getQrLog(b));
-  }
-
-  function getQrExp(index) {
-    const tables = getQrFieldTables();
-    return tables.exp[index % 255];
-  }
-
-  function getQrLog(value) {
-    return getQrFieldTables().log[value];
-  }
-
-  function getQrFieldTables() {
-    if (getQrFieldTables.cache) return getQrFieldTables.cache;
-    const exp = Array(255);
-    const log = Array(256).fill(0);
-    let value = 1;
-    for (let index = 0; index < 255; index += 1) {
-      exp[index] = value;
-      log[value] = index;
-      value <<= 1;
-      if (value & 0x100) value ^= 0x11d;
-    }
-    getQrFieldTables.cache = { exp, log };
-    return getQrFieldTables.cache;
   }
 
   function getSharePersonaLine(persona, stats) {
