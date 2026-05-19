@@ -32,8 +32,20 @@
     </section>
 
     <section class="toolbar-band" aria-label="版图操作">
-      <button class="tool-button" id="generate-map" type="button">生成奶茶版图</button>
-      <button class="icon-button" id="reset-map" type="button" aria-label="重置版图" title="重置版图">↺</button>
+      <div class="toolbar-primary">
+        <button class="tool-button" id="generate-map" type="button">生成奶茶版图</button>
+        <button class="icon-button" id="reset-map" type="button" aria-label="重置版图" title="重置版图">↺</button>
+      </div>
+      <div class="toolbar-tools">
+        <label class="tag-toggle">
+          <input id="brand-label-toggle" type="checkbox">
+          <span>品牌标签</span>
+        </label>
+        <div class="brand-search">
+          <input id="brand-search" type="search" placeholder="搜索奶茶品牌" autocomplete="off" aria-label="搜索奶茶品牌" aria-controls="brand-search-results" aria-expanded="false">
+          <div class="brand-search-results" id="brand-search-results" role="listbox" hidden></div>
+        </div>
+      </div>
     </section>
 
     <section class="map-band" aria-label="奶茶发源地图">

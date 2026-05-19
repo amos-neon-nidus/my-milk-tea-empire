@@ -16,6 +16,8 @@
   };
   const isWeChatBrowser = /MicroMessenger/i.test(navigator.userAgent || "");
   const storageKey = "milkTeaMap:v1";
+  const uiStorageKey = "milkTeaMap:ui:v1";
+  const compactMapMedia = window.matchMedia ? window.matchMedia("(max-width: 640px)") : { matches: false };
   const rankNames = { top1: "本命", top2: "常驻", top3: "心头好" };
   const rankMarks = { top1: "1", top2: "2", top3: "3" };
   const topWeights = { top1: 5, top2: 3, top3: 2 };
@@ -202,16 +204,22 @@
   const siteLinks = document.querySelector(".site-links");
   const studioLink = document.querySelector("#studio-link");
   const githubLink = document.querySelector("#github-link");
+  const brandLabelToggle = document.querySelector("#brand-label-toggle");
+  const brandSearch = document.querySelector("#brand-search");
+  const brandSearchResults = document.querySelector("#brand-search-results");
 
   let selectedBrandId = null;
   let activeProvinceId = null;
   let state = loadState();
+  let uiState = loadUiState();
+  let showBrandLabels = typeof uiState.showBrandLabels === "boolean" ? uiState.showBrandLabels : !compactMapMedia.matches;
   let mapAssetsPromise = null;
   let mapPaintToken = 0;
   let provinceFocusToken = 0;
   let mapMarkerToken = 0;
 
   configureSiteChrome();
+  configureToolbar();
   renderMap();
   renderSummary();
 
@@ -251,6 +259,39 @@
       dialog.close();
     });
   });
+
+  function configureToolbar() {
+    if (brandLabelToggle) {
+      brandLabelToggle.checked = showBrandLabels;
+      brandLabelToggle.addEventListener("change", () => {
+        showBrandLabels = brandLabelToggle.checked;
+        uiState.showBrandLabels = showBrandLabels;
+        saveUiState();
+        renderMap();
+      });
+    }
+
+    if (brandSearch && brandSearchResults) {
+      brandSearch.addEventListener("input", () => renderBrandSearchResults(brandSearch.value));
+      brandSearch.addEventListener("focus", () => renderBrandSearchResults(brandSearch.value));
+      brandSearch.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          const first = getBrandSearchMatches(brandSearch.value)[0];
+          if (!first) return;
+          event.preventDefault();
+          selectSearchedBrand(first.brand.id);
+        }
+        if (event.key === "Escape") {
+          hideBrandSearchResults();
+          brandSearch.blur();
+        }
+      });
+      document.addEventListener("click", (event) => {
+        if (event.target.closest(".brand-search")) return;
+        hideBrandSearchResults();
+      });
+    }
+  }
 
   function configureSiteChrome() {
     document.title = siteConfig.shareTitle || siteConfig.siteName || document.title;
@@ -337,10 +378,27 @@
     }
   }
 
+  function loadUiState() {
+    try {
+      return JSON.parse(localStorage.getItem(uiStorageKey)) || {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  function saveUiState() {
+    try {
+      localStorage.setItem(uiStorageKey, JSON.stringify(uiState));
+    } catch (error) {
+      // UI preferences are optional; the game still works without persistence.
+    }
+  }
+
   function renderMap() {
     const brandsByProvince = groupBrandsByProvince();
     mapBoard.innerHTML = "";
     mapBoard.classList.toggle("has-active-province", Boolean(activeProvinceId));
+    mapBoard.dataset.brandLabels = showBrandLabels ? "visible" : "hidden";
 
     const progressCanvas = document.createElement("canvas");
     progressCanvas.className = "map-progress-canvas";
@@ -358,7 +416,11 @@
     });
 
     paintProgressLayer(progressCanvas, brandsByProvince);
-    renderMapBrandMarkers(brandsByProvince);
+    if (showBrandLabels) {
+      renderMapBrandMarkers(brandsByProvince);
+    } else {
+      mapMarkerToken += 1;
+    }
     renderProvinceFocus(brandsByProvince);
   }
 
@@ -587,6 +649,77 @@
     label.className = "map-brand-token-label";
     label.textContent = text;
     return label;
+  }
+
+  function renderBrandSearchResults(query) {
+    if (!brandSearch || !brandSearchResults) return;
+    const matches = getBrandSearchMatches(query).slice(0, 8);
+    brandSearchResults.innerHTML = "";
+    brandSearch.setAttribute("aria-expanded", matches.length ? "true" : "false");
+
+    if (!matches.length) {
+      brandSearchResults.hidden = true;
+      return;
+    }
+
+    matches.forEach(({ brand, province }) => {
+      const item = document.createElement("button");
+      item.className = "brand-search-result";
+      item.type = "button";
+      item.setAttribute("role", "option");
+      item.dataset.brandId = brand.id;
+
+      const name = document.createElement("strong");
+      name.textContent = brand.name;
+
+      const meta = document.createElement("span");
+      meta.textContent = `${province.name} · ${brandTypeNames[getBrandType(brand)]}`;
+
+      item.append(name, meta);
+      item.addEventListener("click", () => selectSearchedBrand(brand.id));
+      brandSearchResults.append(item);
+    });
+
+    brandSearchResults.hidden = false;
+  }
+
+  function getBrandSearchMatches(query) {
+    const normalized = normalizeSearchText(query);
+    if (!normalized) return [];
+
+    return data.brands
+      .map((brand) => {
+        const province = getProvince(brand.provinceId);
+        const fields = [brand.name, brand.city, province?.name, brandTypeNames[getBrandType(brand)], ...(brand.tags || [])];
+        const haystack = normalizeSearchText(fields.join(" "));
+        if (!haystack.includes(normalized)) return null;
+        const name = normalizeSearchText(brand.name);
+        const score = name === normalized ? 0 : name.startsWith(normalized) ? 1 : haystack.startsWith(normalized) ? 2 : 3;
+        return { brand, province, score };
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.score - b.score || a.brand.name.localeCompare(b.brand.name, "zh-Hans-CN"));
+  }
+
+  function normalizeSearchText(value) {
+    return String(value || "").toLowerCase().replace(/[\s·/｜|,，。.-]+/g, "");
+  }
+
+  function selectSearchedBrand(brandId) {
+    const brand = getBrand(brandId);
+    if (!brand) return;
+    activeProvinceId = brand.provinceId;
+    hideBrandSearchResults();
+    if (brandSearch) brandSearch.value = brand.name;
+    renderMap();
+    openBrandDialog(brand.id);
+    mapBoard.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  function hideBrandSearchResults() {
+    if (!brandSearch || !brandSearchResults) return;
+    brandSearchResults.hidden = true;
+    brandSearch.setAttribute("aria-expanded", "false");
   }
 
   function getMapMarkerTarget(count, itemCount) {
@@ -1848,11 +1981,12 @@
 
   function openBrandDialog(brandId) {
     const brand = getBrand(brandId);
+    if (!brand) return;
     const province = getProvince(brand.provinceId);
     selectedBrandId = brandId;
     brandName.textContent = brand.name;
-    brandOrigin.textContent = `${province.name} · ${brand.city} · ${brandTypeNames[getBrandType(brand)]} · 可信度 ${brand.confidence}`;
-    brandTags.textContent = brand.tags.join(" / ");
+    brandOrigin.textContent = `${province.name} · ${brandTypeNames[getBrandType(brand)]}`;
+    brandTags.textContent = "";
     dialog.showModal();
   }
 
@@ -2198,7 +2332,7 @@
     const x = 34;
     const y = 214;
     const w = 1012;
-    const h = 1265;
+    const h = 1188;
     ctx.save();
     ctx.fillStyle = "#fffdf8";
     ctx.strokeStyle = "#15110f";
@@ -2232,22 +2366,22 @@
 
   function drawSharePersona(ctx, persona, stats) {
     const x = 44;
-    const y = 1492;
+    const y = 1418;
     const w = 992;
-    const h = 344;
+    const h = 296;
     ctx.fillStyle = "#fff8ea";
     ctx.strokeStyle = "#15110f";
     ctx.lineWidth = 6;
     roundRect(ctx, x, y, w, h, 30, true, true);
 
     ctx.fillStyle = "#15110f";
-    ctx.font = "900 32px Microsoft YaHei UI, sans-serif";
-    ctx.fillText("奶茶浓度检测", x + 34, y + 54);
-    drawShareStatPills(ctx, stats, x + 34, y + 70);
-    wrapText(ctx, persona.title, x + 34, y + 158, w - 68, 48, "900 42px KaiTi, STKaiti, serif");
-    wrapText(ctx, getSharePersonaLine(persona, stats), x + 34, y + 214, w - 68, 30, "900 23px Microsoft YaHei UI, sans-serif");
-    drawPersonaTagPills(ctx, stats, x + 34, y + 224, w - 68);
-    drawShareTopSummary(ctx, stats, x + 34, y + 292, w - 68);
+    ctx.font = "900 30px Microsoft YaHei UI, sans-serif";
+    ctx.fillText("奶茶浓度检测", x + 34, y + 50);
+    drawShareStatPills(ctx, stats, x + 34, y + 64);
+    wrapText(ctx, persona.title, x + 34, y + 142, w - 68, 44, "900 40px KaiTi, STKaiti, serif");
+    wrapText(ctx, getSharePersonaLine(persona, stats), x + 34, y + 190, w - 68, 28, "900 22px Microsoft YaHei UI, sans-serif");
+    drawPersonaTagPills(ctx, stats, x + 34, y + 200, w - 68);
+    drawShareTopSummary(ctx, stats, x + 34, y + 260, w - 68);
 
   }
 
@@ -2293,18 +2427,19 @@
   function drawShareTrustFooter(ctx) {
     const shareUrl = getShareUrl();
     const displayUrl = formatShareUrlForCanvas(shareUrl);
-    const qrSize = 72;
-    const qrX = 952;
-    const qrY = 1846;
+    const qrSize = 160;
+    const qrX = 858;
+    const qrY = 1736;
 
     ctx.save();
     ctx.fillStyle = "#15110f";
-    ctx.font = "900 25px Microsoft YaHei UI, sans-serif";
-    ctx.fillText(siteConfig.shareQrTitle || "扫码生成你的奶茶版图", 58, 1860);
+    ctx.font = "900 30px Microsoft YaHei UI, sans-serif";
+    ctx.fillText(siteConfig.shareQrTitle || "扫码生成你的奶茶版图", 58, 1760);
     ctx.fillStyle = "rgba(21, 17, 15, .62)";
-    ctx.font = "900 20px Microsoft YaHei UI, sans-serif";
-    ctx.fillText(siteConfig.shareTrustLine || "网页打开，不登录，不收集微信信息", 58, 1888);
-    ctx.fillText(`非官方娱乐向小工具 · ${displayUrl}`, 58, 1914);
+    ctx.font = "900 22px Microsoft YaHei UI, sans-serif";
+    ctx.fillText(siteConfig.shareTrustLine || "网页打开，不登录，不收集微信信息", 58, 1794);
+    ctx.fillText("非官方娱乐向小工具", 58, 1828);
+    wrapText(ctx, displayUrl, 58, 1860, 760, 27, "900 22px Microsoft YaHei UI, sans-serif", "rgba(21, 17, 15, .62)");
 
     try {
       drawQrCode(ctx, createQrMatrix(shareUrl), qrX, qrY, qrSize);
