@@ -1557,14 +1557,14 @@
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     try {
-      const { masks, renderMasks, overlay } = await getMapAssets();
+      const { masks, overlay } = await getMapAssets();
       if (!canvas.isConnected || token !== mapPaintToken) return;
       canvas.dataset.maskCount = Object.keys(masks).length;
       canvas.dataset.missingMasks = data.provinces.filter((province) => !masks[province.id]).map((province) => province.id).join(",");
 
       data.provinces.forEach((province) => {
         const progress = getProvinceProgress(brandsByProvince[province.id] || []);
-        const mask = renderMasks[province.id] || masks[province.id];
+        const mask = masks[province.id];
         if (!mask) return;
 
         const fill = getProvinceFill(progress);
