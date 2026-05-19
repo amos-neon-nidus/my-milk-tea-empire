@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>我的奶茶版图</title>
+  <meta name="description" content="点亮喝过、想喝和本命奶茶，生成你的奶茶人格分享图。">
+  <meta name="theme-color" content="#ffe4d8">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="我的奶茶版图">
+  <meta property="og:description" content="点亮喝过、想喝和本命奶茶，生成你的奶茶人格分享图。">
+  <meta property="og:image" content="./assets/china-map-wide.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="我的奶茶版图">
+  <meta name="twitter:description" content="点亮喝过、想喝和本命奶茶，生成你的奶茶人格分享图。">
+  <meta name="twitter:image" content="./assets/china-map-wide.png">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="hero-band" aria-labelledby="app-title">
+      <div class="hero-copy">
+        <p class="eyebrow">奶茶浓度检测</p>
+        <h1 id="app-title">我的奶茶版图</h1>
+        <p class="gravity-note">若发现某省变胖，请不要惊慌，那可能是奶茶品牌密度过高，引发了局部空间膨胀。</p>
+      </div>
+      <div class="score-strip" aria-live="polite">
+        <span><strong id="tried-count">0</strong> 喝过</span>
+        <span><strong id="province-count">0</strong> 发源地</span>
+        <span><strong id="want-count">0</strong> 想喝</span>
+      </div>
+    </section>
+
+    <section class="toolbar-band" aria-label="版图操作">
+      <button class="tool-button" id="generate-map" type="button">生成奶茶版图</button>
+      <button class="icon-button" id="reset-map" type="button" aria-label="重置版图" title="重置版图">↺</button>
+    </section>
+
+    <section class="map-band" aria-label="奶茶发源地图">
+      <div class="map-scroll">
+        <div class="map-board" id="map-board" role="list"></div>
+      </div>
+    </section>
+
+    <section class="result-band" id="result-band" aria-live="polite">
+      <div class="result-heading">
+        <p class="eyebrow">奶茶人格</p>
+        <h2 id="persona-title">奶茶人格等待第一杯唤醒</h2>
+      </div>
+      <p id="persona-line">地图暂时很安静，第一杯下去，奶茶雷达就会开始工作。</p>
+      <div class="persona-tag-list" id="persona-tags" aria-label="奶茶人格标签"></div>
+      <div class="top-list" id="top-list"></div>
+      <div class="achievement-grid" id="achievement-grid" aria-label="奶茶成就"></div>
+      <p class="persona-footnote" id="persona-footnote">本命注脚会在选出 Top 1 后出现。</p>
+    </section>
+
+    <section class="share-band" id="share-band" hidden>
+      <div class="share-actions">
+        <div>
+          <p class="eyebrow">奶茶浓度检测报告</p>
+          <p class="share-help" id="share-help">保存图片后，可以发给朋友继续开图。</p>
+        </div>
+        <a class="tool-button secondary" id="download-image" download="我的奶茶版图.png">保存 PNG</a>
+      </div>
+      <img id="share-preview" alt="我的奶茶版图分享图预览">
+    </section>
+  </main>
+
+  <nav class="site-links" aria-label="项目链接">
+    <a id="studio-link" href="http://127.0.0.1:4180/#project=NN-WEB-004" target="_blank" rel="noopener">Idea孵化巢</a>
+    <a id="github-link" href="#" aria-disabled="true">GitHub</a>
+  </nav>
+
+  <dialog class="brand-dialog" id="brand-dialog">
+    <form method="dialog">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow" id="brand-origin">发源地</p>
+          <h2 id="brand-name">品牌</h2>
+        </div>
+        <button class="icon-button" type="submit" aria-label="关闭" title="关闭">×</button>
+      </div>
+      <p class="brand-tags" id="brand-tags"></p>
+      <div class="status-grid" aria-label="选择状态">
+        <button value="tried" class="status-button tried" type="button">喝过</button>
+        <button value="want" class="status-button want" type="button">想喝</button>
+        <button value="top1" class="status-button top1" type="button">本命 Top 1</button>
+        <button value="top2" class="status-button top2" type="button">常驻 Top 2</button>
+        <button value="top3" class="status-button top3" type="button">心头好 Top 3</button>
+        <button value="clear" class="status-button clear" type="button">清除</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="./site-config.js"></script>
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
