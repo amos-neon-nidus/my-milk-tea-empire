@@ -1601,6 +1601,7 @@
         return acc;
       }, {});
       return {
+        base: canvas,
         masks,
         overlay: createMapLineOverlay(masks)
       };
@@ -2349,7 +2350,7 @@
   }
 
   async function drawShareMap(ctx) {
-    const image = await loadImage(mapImageSrc);
+    const assets = await getMapAssets();
     const x = 34;
     const y = 214;
     const w = 1012;
@@ -2360,17 +2361,18 @@
     ctx.lineWidth = 6;
     roundRect(ctx, x, y, w, h, 34, true, true);
     ctx.clip();
-    const imageBox = drawImageCover(ctx, image, x + 14, y + 14, w - 28, h - 28, 0.50);
-    await drawShareProgress(ctx, imageBox.x, imageBox.y, imageBox.w, imageBox.h);
+    const imageBox = { x: x + 14, y: y + 14, w: w - 28, h: h - 28 };
+    ctx.drawImage(assets.base, imageBox.x, imageBox.y, imageBox.w, imageBox.h);
+    await drawShareProgress(ctx, imageBox.x, imageBox.y, imageBox.w, imageBox.h, assets);
     ctx.restore();
     ctx.strokeStyle = "#15110f";
     ctx.lineWidth = 6;
     roundRect(ctx, x, y, w, h, 34, false, true);
   }
 
-  async function drawShareProgress(ctx, x, y, w, h) {
+  async function drawShareProgress(ctx, x, y, w, h, assets = null) {
     const brandsByProvince = groupBrandsByProvince();
-    const { masks, overlay } = await getMapAssets();
+    const { masks, overlay } = assets || await getMapAssets();
     const scaleX = w / mapLayerSize.width;
     const scaleY = h / mapLayerSize.height;
 
