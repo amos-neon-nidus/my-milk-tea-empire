@@ -1408,7 +1408,7 @@ a {
   .toolbar-band {
     width: calc(100vw - 24px);
     max-width: 100%;
-    grid-template-columns: 86px 70px minmax(0, 1fr) 32px;
+    grid-template-columns: 86px 78px minmax(0, 1fr) 32px;
     gap: 5px;
     margin: 6px auto 0;
     padding: 5px;
@@ -1467,13 +1467,12 @@ a {
   }
 
   .tag-toggle {
-    display: inline-flex;
+    position: relative;
+    display: grid;
     order: 2;
     min-width: 0;
     min-height: 36px;
-    justify-content: flex-start;
-    gap: 2px;
-    padding: 5px 5px 5px 6px;
+    padding: 5px 6px;
     border-width: 2.5px;
     border-radius: 8px;
     box-shadow: 3px 3px 0 rgba(21, 17, 15, .14);
@@ -1481,16 +1480,25 @@ a {
   }
 
   .tag-toggle span {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
     font-size: 0;
+    text-align: center;
+    pointer-events: none;
   }
 
   .tag-toggle span::after {
     content: "标签";
     font-size: 13px;
+    line-height: 1;
   }
 
   .tag-toggle input {
-    flex: 0 0 16px;
+    position: relative;
+    z-index: 1;
+    align-self: center;
     width: 16px;
     height: 16px;
   }
