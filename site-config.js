@@ -7,7 +7,7 @@ window.MILK_TEA_SITE_CONFIG = {
   studioLabel: "Idea孵化巢",
   studioUrl: "http://127.0.0.1:4180/#project=NN-WEB-004",
   githubLabel: "GitHub",
-  githubUrl: "",
+  githubUrl: "https://github.com/amos0927qdy-ops/my-milk-tea-empire",
   shareQrTitle: "扫码生成你的奶茶版图",
   shareTrustLine: "网页打开，不登录，不收集微信信息"
 };
