@@ -31,6 +31,7 @@
     many: "高浓度"
   };
   const mapLayerSize = { width: 720, height: 900 };
+  const visualMaskSpread = 2;
   const mapImageSrc = "./assets/china-map-wide.png";
   const provinceSeedOverrides = {
     sichuan: [
@@ -1556,14 +1557,14 @@
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     try {
-      const { masks, overlay } = await getMapAssets();
+      const { masks, renderMasks, overlay } = await getMapAssets();
       if (!canvas.isConnected || token !== mapPaintToken) return;
       canvas.dataset.maskCount = Object.keys(masks).length;
       canvas.dataset.missingMasks = data.provinces.filter((province) => !masks[province.id]).map((province) => province.id).join(",");
 
       data.provinces.forEach((province) => {
         const progress = getProvinceProgress(brandsByProvince[province.id] || []);
-        const mask = masks[province.id];
+        const mask = renderMasks[province.id] || masks[province.id];
         if (!mask) return;
 
         const fill = getProvinceFill(progress);
@@ -1600,9 +1601,11 @@
         }
         return acc;
       }, {});
+      const renderMasks = createExpandedRenderMasks(masks, visualMaskSpread);
       return {
         base: canvas,
         masks,
+        renderMasks,
         overlay: createMapLineOverlay(masks)
       };
     });
@@ -1680,6 +1683,44 @@
 
     maskCtx.putImageData(maskData, 0, 0);
     return { canvas: maskCanvas, alpha, x: minX, y: minY, w: maskWidth, h: maskHeight };
+  }
+
+  function createExpandedRenderMasks(masks, radius) {
+    return Object.entries(masks).reduce((acc, [provinceId, mask]) => {
+      acc[provinceId] = expandMask(mask, radius);
+      return acc;
+    }, {});
+  }
+
+  function expandMask(mask, radius) {
+    if (!radius) return mask;
+
+    const minX = Math.max(0, mask.x - radius);
+    const minY = Math.max(0, mask.y - radius);
+    const maxX = Math.min(mapLayerSize.width, mask.x + mask.w + radius);
+    const maxY = Math.min(mapLayerSize.height, mask.y + mask.h + radius);
+    const canvas = document.createElement("canvas");
+    canvas.width = maxX - minX;
+    canvas.height = maxY - minY;
+    const ctx = canvas.getContext("2d");
+
+    for (let y = -radius; y <= radius; y += 1) {
+      for (let x = -radius; x <= radius; x += 1) {
+        if (x * x + y * y > radius * radius) continue;
+        ctx.drawImage(mask.canvas, mask.x - minX + x, mask.y - minY + y);
+      }
+    }
+
+    const expanded = {
+      canvas,
+      alpha: new Uint8Array(canvas.width * canvas.height),
+      x: minX,
+      y: minY,
+      w: canvas.width,
+      h: canvas.height
+    };
+    syncMaskAlpha(expanded);
+    return expanded;
   }
 
   function readPixel(imageData, x, y) {
@@ -2372,13 +2413,13 @@
 
   async function drawShareProgress(ctx, x, y, w, h, assets = null) {
     const brandsByProvince = groupBrandsByProvince();
-    const { masks, overlay } = assets || await getMapAssets();
+    const { masks, renderMasks, overlay } = assets || await getMapAssets();
     const scaleX = w / mapLayerSize.width;
     const scaleY = h / mapLayerSize.height;
 
     data.provinces.forEach((province) => {
       const progress = getProvinceProgress(brandsByProvince[province.id] || []);
-      const mask = masks[province.id];
+      const mask = (renderMasks && renderMasks[province.id]) || masks[province.id];
       if (!mask) return;
       const fill = getProvinceFill(progress);
       drawMaskTint(ctx, mask, fill.color, fill.alpha, x, y, scaleX, scaleY, progress.topCount > 0);
