@@ -1551,13 +1551,21 @@
     return provinceFillColors[progress.tried] || provinceFillColors.max;
   }
 
+  function getPageProvinceFill(provinceId, progress) {
+    const fill = getProvinceFill(progress);
+    if (compactMapMedia.matches && provinceId === "shandong" && progress.total && !progress.tried) {
+      return { ...fill, color: "#fff8cf" };
+    }
+    return fill;
+  }
+
   async function paintProgressLayer(canvas, brandsByProvince) {
     const token = ++mapPaintToken;
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     try {
-      const { masks, overlay } = await getMapAssets();
+      const { masks, overlay, mobileOverlay } = await getMapAssets();
       if (!canvas.isConnected || token !== mapPaintToken) return;
       canvas.dataset.maskCount = Object.keys(masks).length;
       canvas.dataset.missingMasks = data.provinces.filter((province) => !masks[province.id]).map((province) => province.id).join(",");
@@ -1567,10 +1575,10 @@
         const mask = masks[province.id];
         if (!mask) return;
 
-        const fill = getProvinceFill(progress);
+        const fill = getPageProvinceFill(province.id, progress);
         drawMaskTint(ctx, mask, fill.color, fill.alpha, 0, 0, 1, 1, progress.topCount > 0);
       });
-      ctx.drawImage(overlay, 0, 0);
+      ctx.drawImage(compactMapMedia.matches ? mobileOverlay : overlay, 0, 0);
       drawProvinceLabels(ctx, 0, 0, 1, 1);
     } catch (error) {
       console.warn("Map progress layer failed", error);
@@ -1606,6 +1614,7 @@
         base: canvas,
         masks,
         renderMasks,
+        mobileOverlay: createMapLineOverlay(masks, true),
         overlay: createMapLineOverlay(masks)
       };
     });
@@ -1839,7 +1848,7 @@
     ctx.putImageData(imageData, 0, 0);
   }
 
-  function createMapLineOverlay(masks) {
+  function createMapLineOverlay(masks, highContrast = false) {
     const width = mapLayerSize.width;
     const height = mapLayerSize.height;
     const overlayCanvas = document.createElement("canvas");
@@ -1849,10 +1858,52 @@
     const union = createUnionMask(width, height, masks);
 
     Object.values(masks).forEach((mask) => {
-      drawSingleMaskOutline(overlayCtx, mask, "#fffdf4", 4, 238);
+      drawSingleMaskOutline(overlayCtx, mask, "#fffdf4", highContrast ? 3 : 4, highContrast ? 246 : 238);
     });
+    if (highContrast) {
+      Object.values(masks).forEach((mask) => {
+        drawMaskInnerEdge(overlayCtx, mask, "#4e4038", 96, 1);
+      });
+      if (masks.shandong) {
+        drawMaskInnerEdge(overlayCtx, masks.shandong, "#15110f", 255, 4);
+      }
+    }
     drawUnionOutline(overlayCtx, union, width, height);
     return overlayCanvas;
+  }
+
+  function drawMaskInnerEdge(ctx, mask, color, alpha, radius) {
+    const edgeCanvas = document.createElement("canvas");
+    edgeCanvas.width = mask.w;
+    edgeCanvas.height = mask.h;
+    const edgeCtx = edgeCanvas.getContext("2d");
+    const imageData = edgeCtx.createImageData(mask.w, mask.h);
+    const rgb = hexToRgb(color);
+
+    for (let y = 0; y < mask.h; y += 1) {
+      for (let x = 0; x < mask.w; x += 1) {
+        const offset = y * mask.w + x;
+        if (!mask.alpha[offset] || !isMaskInnerEdge(mask, x, y, radius)) continue;
+        const index = offset * 4;
+        imageData.data[index] = rgb.r;
+        imageData.data[index + 1] = rgb.g;
+        imageData.data[index + 2] = rgb.b;
+        imageData.data[index + 3] = alpha;
+      }
+    }
+
+    edgeCtx.putImageData(imageData, 0, 0);
+    ctx.drawImage(edgeCanvas, mask.x, mask.y);
+  }
+
+  function isMaskInnerEdge(mask, x, y, radius) {
+    for (let y2 = y - radius; y2 <= y + radius; y2 += 1) {
+      for (let x2 = x - radius; x2 <= x + radius; x2 += 1) {
+        if (x2 < 0 || y2 < 0 || x2 >= mask.w || y2 >= mask.h) return true;
+        if (!mask.alpha[y2 * mask.w + x2]) return true;
+      }
+    }
+    return false;
   }
 
   function drawSingleMaskOutline(ctx, mask, color, radius, alpha) {
