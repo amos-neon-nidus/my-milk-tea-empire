@@ -218,6 +218,7 @@
   let provinceFocusToken = 0;
   let mapMarkerToken = 0;
 
+  normalizeSiteConfigUrls();
   configureSiteChrome();
   configureToolbar();
   renderMap();
@@ -290,6 +291,24 @@
         if (event.target.closest(".brand-search")) return;
         hideBrandSearchResults();
       });
+    }
+  }
+
+  function normalizeSiteConfigUrls() {
+    const currentUrl = getCurrentPageUrl();
+    if (isStalePagesUrl(siteConfig.siteUrl)) {
+      siteConfig.siteUrl = currentUrl;
+    }
+    if (isStalePagesUrl(siteConfig.shareImage)) {
+      siteConfig.shareImage = new URL("assets/china-map-wide.png", currentUrl).href;
+    }
+  }
+
+  function isStalePagesUrl(value) {
+    try {
+      return new URL(value, window.location.href).host === "amos0927qdy-ops.github.io";
+    } catch (error) {
+      return false;
     }
   }
 
@@ -2452,6 +2471,10 @@
   function getShareUrl() {
     const configured = String(siteConfig.siteUrl || "").trim();
     if (configured) return configured;
+    return getCurrentPageUrl();
+  }
+
+  function getCurrentPageUrl() {
     const url = new URL(window.location.href);
     url.hash = "";
     url.search = "";
