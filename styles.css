@@ -1410,18 +1410,23 @@ a {
     order: 1;
     min-width: 0;
     min-height: 36px;
-    padding: 5px 6px;
+    padding: 0 4px;
     border-width: 2.5px;
     border-radius: 8px;
     box-shadow: 3px 3px 0 rgba(21, 17, 15, .16);
     font-size: 0;
     line-height: 1;
+    text-align: center;
     white-space: nowrap;
   }
 
   #generate-map::after {
     content: "生成图片";
+    display: block;
+    width: 100%;
     font-size: 13px;
+    line-height: 1;
+    text-align: center;
   }
 
   .tag-toggle {
@@ -1429,9 +1434,9 @@ a {
     order: 2;
     min-width: 0;
     min-height: 36px;
-    justify-content: center;
-    gap: 4px;
-    padding: 5px 4px;
+    justify-content: flex-start;
+    gap: 2px;
+    padding: 5px 5px 5px 6px;
     border-width: 2.5px;
     border-radius: 8px;
     box-shadow: 3px 3px 0 rgba(21, 17, 15, .14);
@@ -1448,6 +1453,7 @@ a {
   }
 
   .tag-toggle input {
+    flex: 0 0 16px;
     width: 16px;
     height: 16px;
   }
