@@ -121,6 +121,7 @@ a {
 .toolbar-band {
   z-index: 20;
   display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(190px, 280px) 52px;
   gap: 10px;
   margin: 10px 0;
   padding: 8px;
@@ -129,16 +130,11 @@ a {
 }
 
 .toolbar-primary {
-  display: grid;
-  grid-template-columns: 1fr 52px;
-  gap: 10px;
+  display: contents;
 }
 
 .toolbar-tools {
-  display: none;
-  grid-template-columns: max-content minmax(0, 1fr);
-  gap: 8px;
-  align-items: stretch;
+  display: contents;
 }
 
 .tool-button,
@@ -171,7 +167,7 @@ a {
 }
 
 .tag-toggle {
-  display: inline-flex;
+  display: none;
   min-height: 40px;
   align-items: center;
   gap: 7px;
@@ -184,6 +180,18 @@ a {
   font-weight: 950;
   white-space: nowrap;
   cursor: pointer;
+}
+
+#generate-map {
+  order: 1;
+}
+
+.brand-search {
+  order: 2;
+}
+
+#reset-map {
+  order: 3;
 }
 
 .tag-toggle input {
@@ -1350,7 +1358,7 @@ a {
   }
 
   .toolbar-band {
-    width: 460px;
+    width: 700px;
     margin-left: auto;
   }
 }
@@ -1383,7 +1391,9 @@ a {
   }
 
   .toolbar-band {
-    grid-template-columns: 94px 58px minmax(0, 1fr) 34px;
+    width: calc(100vw - 16px);
+    max-width: 100%;
+    grid-template-columns: minmax(78px, .8fr) 54px minmax(0, 1fr) 34px;
     gap: 5px;
     margin: 6px 0;
     padding: 5px;
@@ -1397,6 +1407,7 @@ a {
 
   #generate-map {
     order: 1;
+    min-width: 0;
     min-height: 36px;
     padding: 5px 6px;
     border-width: 2.5px;
@@ -1413,7 +1424,9 @@ a {
   }
 
   .tag-toggle {
+    display: inline-flex;
     order: 2;
+    min-width: 0;
     min-height: 36px;
     justify-content: center;
     gap: 4px;
@@ -1440,9 +1453,11 @@ a {
 
   .brand-search {
     order: 3;
+    min-width: 0;
   }
 
   .brand-search input {
+    min-width: 0;
     min-height: 36px;
     padding: 5px 8px;
     border-width: 2.5px;
@@ -1454,6 +1469,7 @@ a {
   #reset-map {
     order: 4;
     width: 34px;
+    min-width: 0;
     min-height: 36px;
     border-width: 2.5px;
     border-radius: 8px;
