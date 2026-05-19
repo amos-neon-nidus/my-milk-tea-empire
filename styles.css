@@ -1486,7 +1486,7 @@ a {
     place-items: center;
     font-size: 0;
     text-align: center;
-    transform: translateY(-1px);
+    transform: translateY(-3px);
     pointer-events: none;
   }
 
@@ -1501,7 +1501,7 @@ a {
     left: 4px;
     top: 50%;
     z-index: 1;
-    transform: translateY(calc(-50% - 1px));
+    transform: translateY(calc(-50% - 3px));
     width: 15px;
     height: 15px;
   }
