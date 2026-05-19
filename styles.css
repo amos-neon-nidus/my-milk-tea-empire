@@ -1116,6 +1116,11 @@ a {
   box-shadow: 5px 5px 0 rgba(21, 17, 15, .16);
 }
 
+.site-links[hidden],
+.site-links a[hidden] {
+  display: none;
+}
+
 .site-links a {
   display: inline-flex;
   min-height: 36px;
@@ -1132,6 +1137,10 @@ a {
 
 .site-links a + a {
   border-left: 3px solid var(--ink);
+}
+
+.site-links a[hidden] + a {
+  border-left: 0;
 }
 
 .site-links a:hover,

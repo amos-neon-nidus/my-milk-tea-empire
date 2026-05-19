@@ -199,6 +199,7 @@
   const sharePreview = document.querySelector("#share-preview");
   const downloadImage = document.querySelector("#download-image");
   const shareHelp = document.querySelector("#share-help");
+  const siteLinks = document.querySelector(".site-links");
   const studioLink = document.querySelector("#studio-link");
   const githubLink = document.querySelector("#github-link");
 
@@ -262,8 +263,13 @@
     updateMeta("name", "twitter:description", siteConfig.shareDescription);
     updateMeta("name", "twitter:image", siteConfig.shareImage);
     updateCanonical(siteConfig.siteUrl);
-    configureExternalLink(studioLink, siteConfig.studioLabel, siteConfig.studioUrl);
-    configureExternalLink(githubLink, siteConfig.githubLabel, siteConfig.githubUrl);
+    const visibleLinks = [
+      configureExternalLink(studioLink, siteConfig.studioLabel, siteConfig.studioUrl),
+      configureExternalLink(githubLink, siteConfig.githubLabel, siteConfig.githubUrl)
+    ];
+    if (siteLinks) {
+      siteLinks.hidden = !visibleLinks.some(Boolean);
+    }
 
     if (shareHelp) {
       shareHelp.textContent = isWeChatBrowser
@@ -295,7 +301,7 @@
   }
 
   function configureExternalLink(link, label, url) {
-    if (!link) return;
+    if (!link) return false;
     link.textContent = label || link.textContent;
     if (url) {
       link.href = url;
@@ -303,13 +309,16 @@
       link.rel = "noopener";
       link.removeAttribute("aria-disabled");
       link.classList.remove("is-disabled");
-      return;
+      link.hidden = false;
+      return true;
     }
     link.href = "#";
     link.removeAttribute("target");
     link.setAttribute("aria-disabled", "true");
     link.classList.add("is-disabled");
+    link.hidden = true;
     link.addEventListener("click", (event) => event.preventDefault());
+    return false;
   }
 
   function loadState() {
