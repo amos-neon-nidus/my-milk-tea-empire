@@ -186,6 +186,20 @@ a {
   order: 1;
 }
 
+.generate-label-mobile,
+.generate-label-busy {
+  display: none;
+}
+
+#generate-map.is-busy .generate-label-desktop,
+#generate-map.is-busy .generate-label-mobile {
+  display: none;
+}
+
+#generate-map.is-busy .generate-label-busy {
+  display: inline;
+}
+
 .brand-search {
   order: 2;
 }
@@ -1407,7 +1421,9 @@ a {
   }
 
   #generate-map {
+    display: grid;
     order: 1;
+    place-items: center;
     min-width: 0;
     min-height: 36px;
     padding: 0 4px;
@@ -1421,8 +1437,29 @@ a {
   }
 
   #generate-map::after {
-    content: "生成图片";
+    content: none;
+  }
+
+  #generate-map .generate-label-desktop {
+    display: none;
+  }
+
+  #generate-map .generate-label-mobile {
     display: block;
+    justify-self: center;
+    width: 100%;
+    font-size: 13px;
+    line-height: 1;
+    text-align: center;
+  }
+
+  #generate-map.is-busy .generate-label-mobile {
+    display: none;
+  }
+
+  #generate-map.is-busy .generate-label-busy {
+    display: block;
+    justify-self: center;
     width: 100%;
     font-size: 13px;
     line-height: 1;

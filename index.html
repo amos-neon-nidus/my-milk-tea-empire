@@ -14,7 +14,7 @@
   <meta name="twitter:title" content="我的奶茶版图">
   <meta name="twitter:description" content="点亮喝过、想喝和本命奶茶，生成你的奶茶人格分享图。">
   <meta name="twitter:image" content="./assets/china-map-wide.png">
-  <link rel="stylesheet" href="./styles.css?v=20260519-mobile-toolbar-align">
+  <link rel="stylesheet" href="./styles.css?v=20260519-real-mobile-labels">
 </head>
 <body>
   <main class="app-shell">
@@ -33,7 +33,11 @@
 
     <section class="toolbar-band" aria-label="版图操作">
       <div class="toolbar-primary">
-        <button class="tool-button" id="generate-map" type="button">生成奶茶版图</button>
+        <button class="tool-button" id="generate-map" type="button">
+          <span class="generate-label generate-label-desktop">生成奶茶版图</span>
+          <span class="generate-label generate-label-mobile">生成图片</span>
+          <span class="generate-label generate-label-busy" hidden>生成中</span>
+        </button>
         <button class="icon-button" id="reset-map" type="button" aria-label="重置版图" title="重置版图">↺</button>
       </div>
       <div class="toolbar-tools">

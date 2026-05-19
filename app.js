@@ -228,8 +228,9 @@
 
   document.querySelector("#generate-map").addEventListener("click", async (event) => {
     const button = event.currentTarget;
-    const originalText = button.textContent;
-    button.textContent = "生成中";
+    const busyLabel = button.querySelector(".generate-label-busy");
+    button.classList.add("is-busy");
+    if (busyLabel) busyLabel.hidden = false;
     button.disabled = true;
     try {
       const url = await createShareImage();
@@ -240,7 +241,8 @@
       shareBand.scrollIntoView({ behavior: "smooth", block: "start" });
     } finally {
       button.disabled = false;
-      button.textContent = originalText;
+      if (busyLabel) busyLabel.hidden = true;
+      button.classList.remove("is-busy");
     }
   });
 
