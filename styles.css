@@ -1496,9 +1496,11 @@ a {
   }
 
   .tag-toggle input {
-    position: relative;
+    position: absolute;
+    left: 7px;
+    top: 50%;
     z-index: 1;
-    align-self: center;
+    transform: translateY(-50%);
     width: 16px;
     height: 16px;
   }
