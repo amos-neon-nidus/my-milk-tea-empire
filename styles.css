@@ -1210,14 +1210,6 @@ a {
   margin-bottom: 14px;
 }
 
-.share-help {
-  margin: 4px 0 0;
-  color: rgba(21, 17, 15, .64);
-  font-size: 12px;
-  font-weight: 900;
-  line-height: 1.35;
-}
-
 #share-preview {
   display: block;
   width: min(100%, 460px);

@@ -10,8 +10,6 @@
     studioUrl: "",
     githubLabel: "GitHub",
     githubUrl: "",
-    shareFooterTitle: "保存图片，邀请朋友开图",
-    shareTrustLine: "网页打开，不登录，不收集微信信息",
     ...(window.MILK_TEA_SITE_CONFIG || {})
   };
   const isWeChatBrowser = /MicroMessenger/i.test(navigator.userAgent || "");
@@ -207,7 +205,6 @@
   const shareBand = document.querySelector("#share-band");
   const sharePreview = document.querySelector("#share-preview");
   const downloadImage = document.querySelector("#download-image");
-  const shareHelp = document.querySelector("#share-help");
   const siteLinks = document.querySelector(".site-links");
   const studioLink = document.querySelector("#studio-link");
   const githubLink = document.querySelector("#github-link");
@@ -340,11 +337,6 @@
       siteLinks.hidden = !visibleLinks.some(Boolean);
     }
 
-    if (shareHelp) {
-      shareHelp.textContent = isWeChatBrowser
-        ? "生成后长按图片保存，再发给朋友更清楚。"
-        : "保存图片后，可以发给朋友继续开图。";
-    }
   }
 
   function updateMeta(attribute, key, value) {
@@ -2557,16 +2549,10 @@
   function drawShareTrustFooter(ctx) {
     const shareUrl = getShareUrl();
     const displayUrl = formatShareUrlForCanvas(shareUrl);
+    const signature = `${siteConfig.shareTitle || document.title} / ${displayUrl}`;
 
     ctx.save();
-    ctx.fillStyle = "#15110f";
-    ctx.font = "900 30px Microsoft YaHei UI, sans-serif";
-    ctx.fillText(siteConfig.shareFooterTitle || "保存图片，邀请朋友开图", 58, 1760);
-    ctx.fillStyle = "rgba(21, 17, 15, .62)";
-    ctx.font = "900 22px Microsoft YaHei UI, sans-serif";
-    ctx.fillText(siteConfig.shareTrustLine || "网页打开，不登录，不收集微信信息", 58, 1794);
-    ctx.fillText("非官方娱乐向小工具 · 分享时可附上网址", 58, 1828);
-    wrapText(ctx, displayUrl, 58, 1864, 964, 30, "900 25px Microsoft YaHei UI, sans-serif", "rgba(21, 17, 15, .72)");
+    wrapText(ctx, signature, 58, 1828, 964, 30, "900 25px Microsoft YaHei UI, sans-serif", "rgba(21, 17, 15, .62)");
     ctx.restore();
   }
 
