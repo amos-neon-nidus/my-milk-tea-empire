@@ -18,6 +18,7 @@
   const storageKey = "milkTeaMap:v1";
   const uiStorageKey = "milkTeaMap:ui:v1";
   const compactMapMedia = window.matchMedia ? window.matchMedia("(max-width: 640px)") : { matches: false };
+  const assetVersion = "20260520-shandong-mobile-hit";
   const rankNames = { top1: "本命", top2: "常驻", top3: "心头好" };
   const rankMarks = { top1: "1", top2: "2", top3: "3" };
   const topWeights = { top1: 5, top2: 3, top3: 2 };
@@ -32,8 +33,13 @@
   };
   const mapLayerSize = { width: 720, height: 900 };
   const visualMaskSpread = 2;
-  const mapImageSrc = "./assets/china-map-wide.png";
+  const mapImageSrc = `./assets/china-map-wide.png?v=${assetVersion}`;
   const provinceSeedOverrides = {
+    shandong: [
+      { x: 556, y: 381 },
+      { x: 574, y: 383 },
+      { x: 588, y: 395 }
+    ],
     sichuan: [
       { x: 284, y: 548 },
       { x: 270, y: 584 },
@@ -1432,7 +1438,8 @@
   }
 
   function getMapPointFromEvent(event) {
-    const rect = mapBoard.getBoundingClientRect();
+    const mapLayer = mapBoard.querySelector(".map-progress-canvas") || mapBoard;
+    const rect = mapLayer.getBoundingClientRect();
     return {
       x: ((event.clientX - rect.left) / rect.width) * mapLayerSize.width,
       y: ((event.clientY - rect.top) / rect.height) * mapLayerSize.height
@@ -1452,15 +1459,31 @@
         best = { id: province.id, distance };
       }
     });
-    return best?.id || null;
+    if (best) return best.id;
+
+    const layoutFallback = data.provinces.find((province) => isPointInProvinceHitFallback(province.id, x, y));
+    return layoutFallback?.id || null;
   }
 
   function getHitTolerance(provinceId) {
     const tiny = new Set(["beijing", "tianjin", "shanghai", "hongkong", "macau", "hainan"]);
     const small = new Set(["ningxia", "chongqing", "taiwan"]);
+    if (provinceId === "shandong") return compactMapMedia.matches ? 20 : 10;
     if (tiny.has(provinceId)) return 18;
     if (small.has(provinceId)) return 12;
     return 6;
+  }
+
+  function isPointInProvinceHitFallback(provinceId, x, y) {
+    if (provinceId !== "shandong") return false;
+    const layout = getLayoutProvince(provinceId);
+    const inset = compactMapMedia.matches ? -16 : -8;
+    return (
+      x >= layout.x + inset &&
+      x <= layout.x + layout.w - inset &&
+      y >= layout.y + inset &&
+      y <= layout.y + layout.h - inset
+    );
   }
 
   function isPointInMask(mask, x, y, radius) {
