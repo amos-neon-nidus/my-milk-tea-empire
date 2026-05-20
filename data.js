@@ -367,6 +367,7 @@ window.MILK_TEA_DATA = {
     { id: "auntea", name: "沪上阿姨", provinceId: "shanghai", city: "上海", confidence: "B", tags: ["鲜果茶", "五谷茶饮", "血糯米", "大众", "甜品"], noteType: "偏好注脚", note: "你相信五谷和水果都能进杯子，热闹一点也没关系。" },
     { id: "lelecha", name: "乐乐茶", provinceId: "shanghai", city: "上海", confidence: "B", tags: ["鲜果茶", "软欧包", "都市", "网红", "精致"], noteType: "偏好注脚", note: "你爱喝，也爱逛，最好一杯茶旁边还能配点面包香。" },
     { id: "happylemon", name: "快乐柠檬", provinceId: "shanghai", city: "上海", confidence: "B", tags: ["柠檬茶", "活力", "老牌", "海外", "清爽"], noteType: "偏好注脚", note: "你对快乐的理解很直接：酸甜冰爽，立刻生效。" },
+    { id: "alittletea", name: "一点点", provinceId: "shanghai", city: "上海", confidence: "A", tags: ["台式手摇", "珍珠奶茶", "老牌", "日常", "小料"], noteType: "偏好注脚", note: "你喜欢老派手摇的日常感，少一点花活，多一点稳定。" },
     { id: "sweetseven", name: "7 分甜", provinceId: "jiangsu", city: "苏州", confidence: "A", tags: ["杨枝甘露", "芒果", "甜品杯", "鲜果", "甜品"], noteType: "偏好注脚", note: "你不是只想喝奶茶，你想喝一杯可以吸的甜品。" },
     { id: "moqi", name: "茉沏", provinceId: "jiangsu", city: "苏州", confidence: "A", tags: ["江南茶饮", "花茶", "碧螺春", "雅致", "茶感"], noteType: "本命气质", note: "你偏爱江南式清雅，甜要收着，香要慢慢来。" },
     { id: "xuncha", name: "巡茶", provinceId: "jiangsu", city: "苏州", confidence: "B", tags: ["茶饮轻烘焙", "东方茶点", "江南", "茶感", "甜品"], noteType: "偏好注脚", note: "你对茶点搭配有执念，喝茶这件事要有完整队形。" },
