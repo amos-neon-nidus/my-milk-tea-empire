@@ -207,7 +207,7 @@
     shanghai: { chunks: [4, 4] }
   });
 
-  const markerEditorEnabled = new URLSearchParams(window.location.search).has("editMarkers");
+  const markerEditorEnabled = isLocalMarkerEditorHost() && new URLSearchParams(window.location.search).has("editMarkers");
   const markerDraftLayoutKey = "milk-tea-marker-layout-draft-v1";
   let markerDraftLayout = markerEditorEnabled ? loadMarkerDraftLayout() : {};
   let markerEditorPanel = null;
@@ -326,6 +326,10 @@
         hideBrandSearchResults();
       });
     }
+  }
+
+  function isLocalMarkerEditorHost() {
+    return ["localhost", "127.0.0.1", "::1", "[::1]"].includes(window.location.hostname);
   }
 
   function configureMarkerEditor() {
