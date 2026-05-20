@@ -18,7 +18,7 @@
   const storageKey = "milkTeaMap:v1";
   const uiStorageKey = "milkTeaMap:ui:v1";
   const compactMapMedia = window.matchMedia ? window.matchMedia("(max-width: 640px)") : { matches: false };
-  const assetVersion = "20260520-shandong-mobile-hit";
+  const assetVersion = "20260520-shandong-color-unified";
   const rankNames = { top1: "本命", top2: "常驻", top3: "心头好" };
   const rankMarks = { top1: "1", top2: "2", top3: "3" };
   const topWeights = { top1: 5, top2: 3, top3: 2 };
@@ -1574,14 +1574,6 @@
     return provinceFillColors[progress.tried] || provinceFillColors.max;
   }
 
-  function getPageProvinceFill(provinceId, progress) {
-    const fill = getProvinceFill(progress);
-    if (compactMapMedia.matches && provinceId === "shandong" && progress.total && !progress.tried) {
-      return { ...fill, color: "#fff8cf" };
-    }
-    return fill;
-  }
-
   async function paintProgressLayer(canvas, brandsByProvince) {
     const token = ++mapPaintToken;
     const ctx = canvas.getContext("2d");
@@ -1598,7 +1590,7 @@
         const mask = masks[province.id];
         if (!mask) return;
 
-        const fill = getPageProvinceFill(province.id, progress);
+        const fill = getProvinceFill(progress);
         drawMaskTint(ctx, mask, fill.color, fill.alpha, 0, 0, 1, 1, progress.topCount > 0);
       });
       ctx.drawImage(compactMapMedia.matches ? mobileOverlay : overlay, 0, 0);
