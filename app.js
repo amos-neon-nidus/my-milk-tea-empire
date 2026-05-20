@@ -2572,9 +2572,9 @@
   function formatShareUrlForCanvas(url) {
     try {
       const parsed = new URL(url);
-      return parsed.host + parsed.pathname.replace(/\/$/, "");
+      return `${parsed.protocol}//${parsed.host}${parsed.pathname.replace(/\/$/, "")}`;
     } catch (error) {
-      return String(url || "").replace(/^https?:\/\//, "").replace(/\/$/, "");
+      return String(url || "").replace(/\/$/, "");
     }
   }
 
