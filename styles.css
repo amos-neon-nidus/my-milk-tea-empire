@@ -796,6 +796,32 @@ a {
   pointer-events: none;
 }
 
+.map-board[data-marker-editor="true"] .map-brand-layer {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.map-board[data-marker-editor="true"] .map-brand-cluster {
+  pointer-events: auto;
+  cursor: grab;
+  outline: 2px dashed transparent;
+  outline-offset: 3px;
+}
+
+.map-board[data-marker-editor="true"] .map-brand-cluster:hover,
+.map-board[data-marker-editor="true"] .map-brand-cluster.is-marker-selected {
+  outline-color: rgba(21, 17, 15, .42);
+}
+
+.map-board[data-marker-editor="true"] .map-brand-cluster.is-marker-dragging {
+  z-index: 95;
+  cursor: grabbing;
+}
+
+.map-board[data-marker-editor="true"] .map-brand-token {
+  cursor: grab;
+}
+
 .map-brand-token {
   position: relative;
   display: inline-grid;
@@ -1057,6 +1083,85 @@ a {
   background: rgba(255, 253, 244, .76);
   box-shadow: 2px 2px 0 rgba(21, 17, 15, .10);
   font-size: clamp(11px, calc(var(--focus-scale) * 3px), 15px);
+}
+
+.marker-editor-panel {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 240;
+  width: min(360px, calc(100vw - 32px));
+  padding: 12px;
+  border: 2px solid rgba(21, 17, 15, .72);
+  border-radius: 8px;
+  background: rgba(255, 253, 244, .96);
+  box-shadow: 4px 4px 0 rgba(21, 17, 15, .18);
+  color: var(--ink);
+}
+
+.marker-editor-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.marker-editor-head strong {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.marker-editor-head span,
+.marker-editor-status {
+  color: rgba(78, 64, 56, .72);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.marker-editor-output {
+  width: 100%;
+  min-height: 148px;
+  max-height: 34vh;
+  resize: vertical;
+  padding: 8px;
+  border: 1.5px solid rgba(21, 17, 15, .34);
+  border-radius: 6px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, .76);
+  font: 11px/1.45 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+}
+
+.marker-editor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.marker-editor-actions button {
+  min-height: 28px;
+  padding: 4px 9px;
+  border: 1.5px solid rgba(21, 17, 15, .56);
+  border-radius: 6px;
+  color: var(--ink);
+  background: #fffdf4;
+  box-shadow: 1px 1px 0 rgba(21, 17, 15, .12);
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.marker-editor-actions button:hover,
+.marker-editor-actions button:focus-visible {
+  border-color: var(--ink);
+  box-shadow: 2px 2px 0 rgba(21, 17, 15, .16);
+}
+
+.marker-editor-status {
+  min-height: 15px;
+  margin: 7px 0 0;
 }
 
 .result-band {

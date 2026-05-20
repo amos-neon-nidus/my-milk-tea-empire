@@ -75,11 +75,17 @@
     auntea: { compact: "沪上", mark: "沪" },
     lelecha: { compact: "乐乐茶", mark: "乐" },
     happylemon: { compact: "快乐柠檬", mark: "柠" },
+    alittletea: { compact: "一点点", mark: "点" },
+    moreyogurt: { compact: "茉酸奶", mark: "酸" },
+    jidong: { compact: "悸动", mark: "悸" },
+    suannaiguanguan: { compact: "酸奶罐罐", mark: "罐" },
+    lemonright: { compact: "柠檬向右", mark: "右" },
     sweetseven: { compact: "7分甜", mark: "7" },
     moqi: { compact: "茉沏", mark: "茉" },
     xuncha: { compact: "巡茶", mark: "巡" },
     fuxiaotao: { compact: "伏小桃", mark: "伏" },
     chaseyanyu: { compact: "茶色烟雨", mark: "烟" },
+    baifencha: { compact: "百分茶", mark: "%" },
     tianlala: { compact: "甜啦啦", mark: "甜" },
     kawanka: { compact: "卡旺卡", mark: "卡" },
     klfs: { compact: "快乐番薯", mark: "薯" },
@@ -108,6 +114,13 @@
     saintsalp: { compact: "仙迹岩", mark: "仙" },
     yuezhicha: { compact: "悦之茶", mark: "悦" },
     unceasingly: { compact: "不已", mark: "不" },
+    chajiuxingqiu: { compact: "茶救星球", mark: "救" },
+    teayishi: { compact: "茶理宜世", mark: "理" },
+    yinggehun: { compact: "英歌魂", mark: "英" },
+    bingliwang: { compact: "兵立王", mark: "兵" },
+    xinshiqi: { compact: "新时沏", mark: "新" },
+    liangxiaotang: { compact: "梁小糖", mark: "梁" },
+    baozhugong: { compact: "煲珠公", mark: "煲" },
     coco: { compact: "CoCo", mark: "Co" },
     milksha: { compact: "迷客夏", mark: "迷" },
     "50lan": { compact: "50岚", mark: "50" },
@@ -153,40 +166,54 @@
   });
 
   const markerLayout = Object.freeze({
-    anhui: { x: 536.5, y: 473.3 },
-    beijing: { x: 497, y: 286.6 },
-    fujian: { x: 556, y: 638 },
-    gansu: { x: 263.5, y: 351 },
-    guangdong: { x: 455.7, y: 687.1 },
-    guangxi: { x: 381, y: 760 },
-    guizhou: { x: 357, y: 667.5 },
-    hainan: { x: 378.1, y: 849 },
-    hebei: { x: 478.5, y: 366.7 },
-    heilongjiang: { x: 631.5, y: 152.7 },
-    henan: { x: 451.6, y: 426.7 },
-    hongkong: { x: 502.6, y: 772.3 },
-    hubei: { x: 438.8, y: 511.8 },
-    hunan: { x: 438.5, y: 588.2 },
-    "inner-mongolia": { x: 380.1, y: 307.5 },
-    jilin: { x: 612.9, y: 215 },
-    jiangsu: { x: 583, y: 420.7 },
-    jiangxi: { x: 520, y: 586 },
-    liaoning: { x: 566.6, y: 268.6 },
-    macau: { x: 446.2, y: 771.9 },
-    ningxia: { x: 340.5, y: 393 },
-    qinghai: { x: 197, y: 451.5 },
-    shaanxi: { x: 348.5, y: 487.5 },
-    shandong: { x: 538.8, y: 351.9 },
-    shanghai: { x: 631.6, y: 485.5 },
-    shanxi: { x: 419.3, y: 393.9 },
-    sichuan: { x: 255.4, y: 536.4 },
-    taiwan: { x: 611.8, y: 716.1 },
-    tianjin: { x: 514.1, y: 320.1 },
-    tibet: { x: 90.1, y: 534.7 },
     xinjiang: { x: 107, y: 314.5 },
+    "inner-mongolia": { x: 372.7, y: 304.3 },
+    heilongjiang: { x: 618.9, y: 150.6 },
+    gansu: { x: 255.1, y: 345.7 },
+    jilin: { x: 612.9, y: 215 },
+    qinghai: { x: 197, y: 451.5 },
+    ningxia: { x: 342.6, y: 382.5 },
+    liaoning: { x: 566.6, y: 268.6 },
+    tibet: { x: 90.1, y: 534.7 },
+    shanxi: { x: 419.3, y: 393.9 },
+    beijing: { x: 490.7, y: 286.6 },
+    tianjin: { x: 513, y: 318 },
+    hebei: { x: 478.5, y: 366.7 },
+    shandong: { x: 538.8, y: 351.9 },
+    shaanxi: { x: 354.8, y: 481.2 },
+    henan: { x: 451.6, y: 426.7 },
+    sichuan: { x: 260.6, y: 535.3 },
+    chongqing: { x: 349.1, y: 571.6 },
+    hubei: { x: 417.7, y: 507.6 },
+    anhui: { x: 536.5, y: 473.3 },
+    jiangsu: { x: 583, y: 420.7 },
+    guizhou: { x: 357, y: 667.5 },
+    hunan: { x: 438.5, y: 588.2 },
+    shanghai: { x: 620, y: 486.6 },
     yunnan: { x: 259.8, y: 742.7 },
-    zhejiang: { x: 590.1, y: 547.9 }
+    guangxi: { x: 379.9, y: 704.2 },
+    jiangxi: { x: 523.2, y: 629.2 },
+    zhejiang: { x: 596.4, y: 547.9 },
+    fujian: { x: 556, y: 638 },
+    guangdong: { x: 451.4, y: 688 },
+    hongkong: { x: 502.6, y: 772.3 },
+    macau: { x: 446.2, y: 771.9 },
+    hainan: { x: 378.1, y: 846.9 },
+    taiwan: { x: 611.8, y: 716.1 }
   });
+
+  const markerSummaryLayout = Object.freeze({
+    guangdong: { chunks: [5, 4] },
+    shanghai: { chunks: [4, 4] }
+  });
+
+  const markerEditorEnabled = new URLSearchParams(window.location.search).has("editMarkers");
+  const markerDraftLayoutKey = "milk-tea-marker-layout-draft-v1";
+  let markerDraftLayout = markerEditorEnabled ? loadMarkerDraftLayout() : {};
+  let markerEditorPanel = null;
+  let markerEditorTextarea = null;
+  let markerEditorStatus = null;
+  let markerEditorSelectedId = null;
 
   const mapBoard = document.querySelector("#map-board");
   const dialog = document.querySelector("#brand-dialog");
@@ -225,6 +252,7 @@
   normalizeSiteConfigUrls();
   configureSiteChrome();
   configureToolbar();
+  configureMarkerEditor();
   renderMap();
   renderSummary();
 
@@ -298,6 +326,228 @@
         hideBrandSearchResults();
       });
     }
+  }
+
+  function configureMarkerEditor() {
+    if (!markerEditorEnabled) return;
+    mapBoard.dataset.markerEditor = "true";
+
+    markerEditorPanel = document.createElement("section");
+    markerEditorPanel.className = "marker-editor-panel";
+    markerEditorPanel.setAttribute("aria-label", "胶囊位置校准");
+    markerEditorPanel.innerHTML = `
+      <div class="marker-editor-head">
+        <strong>胶囊校准</strong>
+        <span>拖动胶囊，方向键微调</span>
+      </div>
+      <textarea class="marker-editor-output" readonly spellcheck="false"></textarea>
+      <div class="marker-editor-actions">
+        <button type="button" data-action="copy">复制坐标</button>
+        <button type="button" data-action="reset-selected">重置选中</button>
+        <button type="button" data-action="clear">清空草稿</button>
+      </div>
+      <p class="marker-editor-status" aria-live="polite"></p>
+    `;
+    markerEditorTextarea = markerEditorPanel.querySelector(".marker-editor-output");
+    markerEditorStatus = markerEditorPanel.querySelector(".marker-editor-status");
+    markerEditorPanel.addEventListener("click", handleMarkerEditorPanelClick);
+    document.body.append(markerEditorPanel);
+    updateMarkerEditorOutput();
+  }
+
+  async function handleMarkerEditorPanelClick(event) {
+    const action = event.target.closest("[data-action]")?.dataset.action;
+    if (!action) return;
+
+    if (action === "copy") {
+      const output = getMarkerEditorOutput();
+      try {
+        await navigator.clipboard.writeText(output);
+        setMarkerEditorStatus("已复制当前坐标");
+      } catch (error) {
+        markerEditorTextarea?.select();
+        setMarkerEditorStatus("复制失败，可手动复制文本框");
+      }
+      return;
+    }
+
+    if (action === "reset-selected") {
+      if (!markerEditorSelectedId) {
+        setMarkerEditorStatus("先点选一个胶囊");
+        return;
+      }
+      delete markerDraftLayout[markerEditorSelectedId];
+      saveMarkerDraftLayout();
+      setMarkerEditorStatus(`${getProvince(markerEditorSelectedId)?.name || markerEditorSelectedId} 已回到源码坐标`);
+      renderMap();
+      return;
+    }
+
+    if (action === "clear") {
+      markerDraftLayout = {};
+      saveMarkerDraftLayout();
+      markerEditorSelectedId = null;
+      setMarkerEditorStatus("已清空本地草稿");
+      renderMap();
+    }
+  }
+
+  function loadMarkerDraftLayout() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(markerDraftLayoutKey) || "{}");
+      return normalizeMarkerLayoutDraft(parsed);
+    } catch (error) {
+      return {};
+    }
+  }
+
+  function normalizeMarkerLayoutDraft(value) {
+    if (!value || typeof value !== "object") return {};
+    return Object.entries(value).reduce((acc, [provinceId, position]) => {
+      const x = Number(position?.x);
+      const y = Number(position?.y);
+      if (Number.isFinite(x) && Number.isFinite(y)) acc[provinceId] = { x, y };
+      return acc;
+    }, {});
+  }
+
+  function saveMarkerDraftLayout() {
+    if (!markerEditorEnabled) return;
+    localStorage.setItem(markerDraftLayoutKey, JSON.stringify(markerDraftLayout));
+    updateMarkerEditorOutput();
+  }
+
+  function getMarkerLayoutOverride(provinceId) {
+    const base = markerLayout[provinceId] || {};
+    const draft = markerEditorEnabled ? markerDraftLayout[provinceId] || {} : {};
+    return { ...base, ...draft };
+  }
+
+  function updateMarkerEditorOutput() {
+    if (!markerEditorTextarea) return;
+    markerEditorTextarea.value = getMarkerEditorOutput();
+  }
+
+  function getMarkerEditorOutput() {
+    const merged = data.provinces.reduce((acc, province) => {
+      const position = getMarkerLayoutOverride(province.id);
+      if (Number.isFinite(position.x) && Number.isFinite(position.y)) {
+        acc[province.id] = {
+          x: roundMarkerCoordinate(position.x),
+          y: roundMarkerCoordinate(position.y)
+        };
+      }
+      return acc;
+    }, {});
+
+    return `const markerLayout = Object.freeze(${formatMarkerLayoutObject(merged)});`;
+  }
+
+  function formatMarkerLayoutObject(layout) {
+    const lines = Object.entries(layout)
+      .map(([provinceId, position]) => {
+        const key = /^[a-z][a-z0-9]*$/i.test(provinceId) ? provinceId : JSON.stringify(provinceId);
+        return `  ${key}: { x: ${position.x}, y: ${position.y} }`;
+      });
+    return `{\n${lines.join(",\n")}\n}`;
+  }
+
+  function setMarkerEditorStatus(message) {
+    if (!markerEditorStatus) return;
+    markerEditorStatus.textContent = message;
+  }
+
+  function enableMarkerEditorForCluster(cluster) {
+    if (!markerEditorEnabled) return;
+    cluster.tabIndex = 0;
+    cluster.title = "拖动胶囊调整位置";
+    cluster.addEventListener("pointerdown", handleMarkerEditorPointerDown);
+    cluster.addEventListener("keydown", handleMarkerEditorKeydown);
+    cluster.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      selectMarkerEditorCluster(cluster);
+    });
+  }
+
+  function handleMarkerEditorKeydown(event) {
+    if (!markerEditorEnabled || !["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)) return;
+    event.preventDefault();
+
+    const step = event.shiftKey ? 5 : 1;
+    const dx = event.key === "ArrowLeft" ? -step : event.key === "ArrowRight" ? step : 0;
+    const dy = event.key === "ArrowUp" ? -step : event.key === "ArrowDown" ? step : 0;
+    moveMarkerCluster(event.currentTarget, dx, dy);
+  }
+
+  function handleMarkerEditorPointerDown(event) {
+    if (!markerEditorEnabled || event.button !== 0) return;
+    const cluster = event.currentTarget;
+    event.preventDefault();
+    event.stopPropagation();
+    cluster.focus({ preventScroll: true });
+    cluster.setPointerCapture?.(event.pointerId);
+    cluster.classList.add("is-marker-dragging");
+    selectMarkerEditorCluster(cluster);
+
+    const startX = event.clientX;
+    const startY = event.clientY;
+    const startMarkerX = Number(cluster.style.getPropertyValue("--marker-x")) || 0;
+    const startMarkerY = Number(cluster.style.getPropertyValue("--marker-y")) || 0;
+
+    const handlePointerMove = (moveEvent) => {
+      const boardRect = mapBoard.getBoundingClientRect();
+      const dx = (moveEvent.clientX - startX) / boardRect.width * mapLayerSize.width;
+      const dy = (moveEvent.clientY - startY) / boardRect.height * mapLayerSize.height;
+      setMarkerClusterPosition(cluster, startMarkerX + dx, startMarkerY + dy);
+    };
+
+    const handlePointerUp = () => {
+      cluster.releasePointerCapture?.(event.pointerId);
+      cluster.classList.remove("is-marker-dragging");
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
+      saveMarkerDraftLayout();
+    };
+
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp, { once: true });
+  }
+
+  function moveMarkerCluster(cluster, dx, dy) {
+    const currentX = Number(cluster.style.getPropertyValue("--marker-x")) || 0;
+    const currentY = Number(cluster.style.getPropertyValue("--marker-y")) || 0;
+    setMarkerClusterPosition(cluster, currentX + dx, currentY + dy);
+    saveMarkerDraftLayout();
+  }
+
+  function setMarkerClusterPosition(cluster, x, y) {
+    const provinceId = cluster.dataset.provinceId;
+    const markerWidth = Number(cluster.style.getPropertyValue("--marker-w")) || 18;
+    const markerHeight = Number(cluster.style.getPropertyValue("--marker-h")) || 16;
+    const nextX = roundMarkerCoordinate(clamp(x, -16, mapLayerSize.width - markerWidth + 16));
+    const nextY = roundMarkerCoordinate(clamp(y, -16, mapLayerSize.height - markerHeight + 16));
+
+    markerDraftLayout[provinceId] = { x: nextX, y: nextY };
+    cluster.style.setProperty("--marker-x", nextX);
+    cluster.style.setProperty("--marker-y", nextY);
+    selectMarkerEditorCluster(cluster);
+    updateMarkerEditorOutput();
+  }
+
+  function selectMarkerEditorCluster(cluster) {
+    markerEditorSelectedId = cluster.dataset.provinceId;
+    mapBoard.querySelectorAll(".map-brand-cluster.is-marker-selected").forEach((node) => {
+      node.classList.remove("is-marker-selected");
+    });
+    cluster.classList.add("is-marker-selected");
+    const province = getProvince(markerEditorSelectedId);
+    const position = getMarkerLayoutOverride(markerEditorSelectedId);
+    setMarkerEditorStatus(`${province?.name || markerEditorSelectedId} x:${roundMarkerCoordinate(position.x)} y:${roundMarkerCoordinate(position.y)}`);
+  }
+
+  function roundMarkerCoordinate(value) {
+    return Math.round(Number(value) * 10) / 10;
   }
 
   function normalizeSiteConfigUrls() {
@@ -564,14 +814,14 @@
   }
 
   function createMapBrandCluster(province, layout, mask, brands) {
-    const displayItems = getMapBrandDisplayItems(brands);
+    const displayItems = getMapBrandDisplayItems(province.id, brands);
     const markerTarget = getMapMarkerTarget(brands.length, displayItems.length);
     const rect = findBestMaskRect(mask, markerTarget.aspect);
     const bounds = getMapMarkerBounds(province.id, mask, layout, rect, brands, displayItems);
     if (bounds.w < 14 || bounds.h < 12) return null;
 
     const cluster = document.createElement("div");
-    const markerOverride = markerLayout[province.id];
+    const markerOverride = getMarkerLayoutOverride(province.id);
     const markerX = Number.isFinite(markerOverride?.x) ? markerOverride.x : bounds.x;
     const markerY = Number.isFinite(markerOverride?.y) ? markerOverride.y : bounds.y;
     cluster.className = "map-brand-cluster";
@@ -585,6 +835,8 @@
     cluster.style.setProperty("--marker-columns", bounds.columns || 1);
     cluster.style.setProperty("--marker-gap", `${bounds.gap || 2}px`);
     cluster.dataset.splitLabel = bounds.splitLabel ? "true" : "false";
+    cluster.dataset.layout = bounds.layout || "stack";
+    enableMarkerEditorForCluster(cluster);
 
     displayItems.forEach((item) => {
       cluster.append(item.type === "summary"
@@ -595,7 +847,12 @@
     return cluster;
   }
 
-  function getMapBrandDisplayItems(brands) {
+  function getMapBrandDisplayItems(provinceId, brands) {
+    const summaryLayout = getMarkerSummaryLayout(provinceId, brands.length);
+    if (summaryLayout) {
+      return getChunkedMapBrandDisplayItems(provinceId, brands, summaryLayout.chunks);
+    }
+
     if (brands.length <= 2) {
       return brands.map((brand) => ({ type: "brand", brand }));
     }
@@ -605,6 +862,22 @@
     for (let index = 0; index < brands.length; index += chunkSize) {
       items.push({ type: "summary", provinceId: brands[0]?.provinceId || "", brands: brands.slice(index, index + chunkSize) });
     }
+    return items;
+  }
+
+  function getChunkedMapBrandDisplayItems(provinceId, brands, chunks) {
+    const items = [];
+    let index = 0;
+    chunks.forEach((size) => {
+      const chunk = brands.slice(index, index + size);
+      if (chunk.length) items.push({ type: "summary", provinceId, brands: chunk });
+      index += size;
+    });
+
+    if (index < brands.length) {
+      items.push({ type: "summary", provinceId, brands: brands.slice(index) });
+    }
+
     return items;
   }
 
@@ -621,6 +894,7 @@
     token.setAttribute("aria-label", `${brand.name}，点击选择喝过或 Top`);
     token.addEventListener("click", (event) => {
       event.stopPropagation();
+      if (markerEditorEnabled) return;
       openBrandDialog(brand.id);
     });
     return token;
@@ -635,6 +909,7 @@
     token.setAttribute("aria-label", `${province.name}奶茶品牌摘要，点击展开`);
     token.addEventListener("click", (event) => {
       event.stopPropagation();
+      if (markerEditorEnabled) return;
       activeProvinceId = province.id;
       renderMap();
     });
@@ -829,6 +1104,12 @@
     return 1;
   }
 
+  function getMarkerSummaryLayout(provinceId, count) {
+    const layout = markerSummaryLayout[provinceId];
+    const expectedCount = layout?.chunks.reduce((sum, size) => sum + size, 0);
+    return expectedCount === count ? layout : null;
+  }
+
   function getMapMarkerSize(displayItems, count, columns, markerGap, maxWidth) {
     const widths = displayItems.map((item) => getMapMarkerItemWidth(item, count, maxWidth));
     const rowWidths = [];
@@ -848,7 +1129,7 @@
     const text = item.type === "summary"
       ? getBrandMapSummaryText(item.provinceId, item.brands)
       : getEstimatedBrandMapText(item.brand, count, maxWidth);
-    const mode = item.type === "summary" ? "summary" : count <= 1 ? "full" : "compact";
+    const mode = item.type === "summary" ? "summary" : count <= 1 ? "full" : count <= 4 ? "compact" : "mark";
     return estimateMapTokenWidth(text, mode);
   }
 
@@ -1162,8 +1443,16 @@
     const bounds = getScaledMaskBounds(mask, centerX, centerY, scale, 0, 0);
     const shift = getBoundsShift(bounds, 18);
     const shiftedBounds = getScaledMaskBounds(mask, centerX, centerY, scale, shift.x, shift.y);
-    const content = getScaledRect(textRect, mask, centerX, centerY, scale, shift);
+    const rawContent = getScaledRect(textRect, mask, centerX, centerY, scale, shift);
     const inset = clamp(scale * 5, 8, 18);
+    const content = shouldUseRoomyFocusContent(provinceId, brands)
+      ? getRoomyFocusContent(rawContent, shiftedBounds, target, inset)
+      : {
+        x: rawContent.x + inset,
+        y: rawContent.y + inset,
+        w: Math.max(72, rawContent.w - inset * 2),
+        h: Math.max(58, rawContent.h - inset * 2)
+      };
 
     return {
       scale,
@@ -1172,35 +1461,102 @@
       shiftX: shift.x,
       shiftY: shift.y,
       bounds: shiftedBounds,
-      content: {
-        x: content.x + inset,
-        y: content.y + inset,
-        w: Math.max(72, content.w - inset * 2),
-        h: Math.max(58, content.h - inset * 2)
-      }
+      content
     };
   }
 
   function getFocusContentTarget(provinceId, brands) {
     const count = brands.length;
+    const brandTarget = getFocusBrandTarget(brands, isTinyProvince(provinceId));
     if (isTinyProvince(provinceId)) {
       if (!count) return { width: 122, height: 62, aspect: 1.95, minScale: 1.75 };
-      if (count <= 2) return { width: 168, height: 80, aspect: 2.1, minScale: 2.05 };
-      return { width: 214, height: 116, aspect: 1.85, minScale: 2.35 };
+      const baseWidth = count <= 2 ? 168 : count <= 4 ? 204 : 232;
+      const baseHeight = count <= 2 ? 80 : count <= 4 ? 128 : 164;
+      const width = Math.min(284, Math.max(baseWidth, brandTarget.width + 24));
+      const height = Math.min(224, Math.max(baseHeight, brandTarget.height + 54));
+      return {
+        width,
+        height,
+        aspect: clamp(width / height, 0.92, 2.1),
+        minScale: count >= 7 ? 3.2 : count >= 5 ? 2.8 : count >= 3 ? 2.45 : 2.05
+      };
     }
     if (!count) return { width: 112, height: 58, aspect: 1.9, minScale: 1.25 };
     if (count <= 1) return { width: 126, height: 64, aspect: 1.95, minScale: 1.3 };
     if (count <= 2) return { width: 154, height: 74, aspect: 2.08, minScale: 1.45 };
-    if (count <= 4) return { width: 196, height: 92, aspect: 2.14, minScale: 1.65 };
-    return { width: 236, height: 108, aspect: 2.18, minScale: 1.9 };
+    const baseWidth = count <= 4 ? 196 : count <= 6 ? 236 : 286;
+    const baseHeight = count <= 4 ? 94 : count <= 6 ? 118 : 142;
+    const width = Math.min(332, Math.max(baseWidth, brandTarget.width + 26));
+    const height = Math.min(192, Math.max(baseHeight, brandTarget.height + 48));
+    return {
+      width,
+      height,
+      aspect: clamp(width / height, 1.2, 2.28),
+      minScale: count >= 8 ? 2.18 : count >= 5 ? 1.9 : 1.65
+    };
+  }
+
+  function getFocusBrandTarget(brands, isTiny) {
+    const count = brands.length;
+    if (!count) return { width: 0, height: 0 };
+    const maxColumns = isTiny ? (count >= 5 ? 2 : count >= 3 ? 2 : 1) : count >= 7 ? 3 : count >= 3 ? 2 : 1;
+    const columns = Math.min(count, maxColumns);
+    const rows = Math.ceil(count / columns);
+    const gap = isTiny ? 7 : 6;
+    const longestChip = Math.max(...brands.map((brand) => estimateFocusChipWidth(brand.name)));
+    return {
+      width: columns * longestChip + Math.max(0, columns - 1) * gap,
+      height: rows * 25 + Math.max(0, rows - 1) * gap
+    };
+  }
+
+  function estimateFocusChipWidth(name) {
+    let width = 22;
+    for (const char of String(name || "")) {
+      if (/\s/.test(char)) {
+        width += 3;
+      } else if (/[A-Za-z0-9]/.test(char)) {
+        width += 6;
+      } else {
+        width += 11;
+      }
+    }
+    return clamp(width, 46, 112);
+  }
+
+  function shouldUseRoomyFocusContent(provinceId, brands) {
+    return isTinyProvince(provinceId) || brands.length >= 6;
+  }
+
+  function getRoomyFocusContent(rawContent, bounds, target, inset) {
+    const maxWidth = Math.max(72, bounds.w - inset * 2);
+    const maxHeight = Math.max(58, bounds.h - inset * 2);
+    const width = Math.min(maxWidth, Math.max(rawContent.w - inset * 2, target.width));
+    const height = Math.min(maxHeight, Math.max(rawContent.h - inset * 2, target.height));
+    const centerX = rawContent.x + rawContent.w / 2;
+    const centerY = rawContent.y + rawContent.h / 2;
+    const minX = bounds.x + inset;
+    const minY = bounds.y + inset;
+    const maxX = Math.max(minX, bounds.x + bounds.w - inset - width);
+    const maxY = Math.max(minY, bounds.y + bounds.h - inset - height);
+
+    return {
+      x: clamp(centerX - width / 2, minX, maxX),
+      y: clamp(centerY - height / 2, minY, maxY),
+      w: width,
+      h: height
+    };
   }
 
   function getProvinceFocusMaxScale(provinceId, mask, brands) {
     const count = brands.length;
     if (isTinyProvince(provinceId)) {
-      return count >= 3 ? 4.1 : count >= 1 ? 3.35 : 2.45;
+      if (count >= 7) return 5.35;
+      if (count >= 5) return 4.85;
+      if (count >= 3) return 4.45;
+      return count >= 1 ? 3.35 : 2.45;
     }
-    const base = count >= 5 ? 2.9 : count >= 3 ? 2.45 : count >= 1 ? 2.05 : 1.65;
+    const base = count >= 8 ? 3.45 : count >= 5 ? 3.05 : count >= 3 ? 2.45 : count >= 1 ? 2.05 : 1.65;
     const smallProvinceBoost = Math.min(mask.w, mask.h) < 58 ? 0.45 : 0;
     return base + smallProvinceBoost;
   }
