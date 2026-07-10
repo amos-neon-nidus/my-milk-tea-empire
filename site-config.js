@@ -7,5 +7,5 @@ window.MILK_TEA_SITE_CONFIG = {
   studioLabel: "Idea孵化巢",
   studioUrl: "",
   githubLabel: "GitHub",
-  githubUrl: ""
+  githubUrl: "https://github.com/amos-neon-nidus/my-milk-tea-empire"
 };
