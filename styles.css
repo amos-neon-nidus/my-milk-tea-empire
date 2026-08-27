@@ -1475,6 +1475,186 @@ a {
   }
 }
 
+/* 桌面端保持地图原始比例，以等宽双栏平衡地图与信息区。 */
+@media (min-width: 1024px) {
+  .app-shell {
+    width: fit-content;
+    max-width: calc(100vw - 24px);
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, min(44vw, calc((100vh - 24px) * 4 / 5))));
+    grid-template-columns: repeat(2, minmax(0, min(44vw, calc((100dvh - 24px) * 4 / 5))));
+    grid-template-rows: auto auto auto minmax(0, 1fr);
+    grid-template-areas:
+      "map hero"
+      "map toolbar"
+      "map result"
+      "map .";
+    gap: 10px 20px;
+    padding: 12px;
+  }
+
+  .hero-band {
+    grid-area: hero;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    gap: 10px;
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(44px, 3.8vw, 60px);
+  }
+
+  .gravity-note {
+    margin-top: 6px;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .score-strip span {
+    padding: 7px 6px;
+    font-size: 12px;
+  }
+
+  .score-strip strong {
+    font-size: 30px;
+  }
+
+  .toolbar-band {
+    grid-area: toolbar;
+    grid-template-columns: 160px minmax(0, 1fr) 44px;
+    width: 100%;
+    gap: 8px;
+    margin: 0;
+    padding: 8px;
+  }
+
+  #generate-map {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .brand-search {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  #reset-map {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .map-band {
+    grid-area: map;
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+  }
+
+  .map-scroll {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    align-items: flex-start;
+    padding: 0;
+  }
+
+  .map-board {
+    flex: 0 0 100%;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    max-height: none;
+    aspect-ratio: 720 / 900;
+  }
+
+  .result-band {
+    grid-area: result;
+    min-height: 0;
+    align-self: start;
+    margin-top: 0;
+    padding: 14px;
+    overflow: visible;
+  }
+
+  .result-heading h2 {
+    font-size: 28px;
+  }
+
+  #persona-line,
+  .persona-footnote {
+    margin-top: 9px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .persona-tag-list,
+  .top-list,
+  .achievement-grid {
+    margin-top: 8px;
+  }
+
+  .persona-tag-list {
+    gap: 6px;
+  }
+
+  .persona-tag {
+    min-height: 26px;
+    padding: 4px 9px;
+    font-size: 12px;
+  }
+
+  .top-list {
+    gap: 7px;
+  }
+
+  .top-item {
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .top-item span:first-child {
+    min-height: 28px;
+    font-size: 12px;
+  }
+
+  .top-item strong {
+    font-size: 12px;
+  }
+
+  .achievement-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .achievement-card {
+    padding: 10px;
+  }
+
+  .achievement-card strong {
+    font-size: 24px;
+  }
+
+  .achievement-card small {
+    font-size: 10px;
+  }
+
+  .share-band {
+    grid-column: 1 / -1;
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 1200px) {
+  .achievement-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 640px) {
   .app-shell {
     padding-top: 4px;
