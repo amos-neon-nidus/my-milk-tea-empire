@@ -14,7 +14,7 @@
   <meta name="twitter:title" content="我的奶茶版图">
   <meta name="twitter:description" content="点亮喝过、想喝和本命奶茶，生成你的奶茶人格分享图。">
   <meta name="twitter:image" content="./assets/china-map-wide.png">
-  <link rel="stylesheet" href="./styles.css?v=20260828-desktop-centered">
+  <link rel="stylesheet" href="./styles.css?v=20260828-persistent-result">
 </head>
 <body>
   <main class="app-shell">
@@ -29,10 +29,14 @@
         <span><strong id="province-count">0</strong> 发源地</span>
         <span><strong id="want-count">0</strong> 想喝</span>
       </div>
-      <button class="tool-button generate-map-button desktop-generate-button" type="button">
-        <span class="generate-label generate-label-desktop">生成奶茶版图</span>
-        <span class="generate-label generate-label-busy" hidden>生成中</span>
-      </button>
+      <div class="desktop-hero-actions">
+        <button class="tool-button generate-map-button desktop-generate-button" type="button">
+          <span class="generate-label generate-label-desktop">生成奶茶版图</span>
+          <span class="generate-label generate-label-regenerate">重新生成</span>
+          <span class="generate-label generate-label-busy" hidden>生成中</span>
+        </button>
+        <button class="tool-button reset-map-button desktop-reset-button" type="button">重置选择</button>
+      </div>
     </section>
 
     <section class="toolbar-band" aria-label="版图操作">
@@ -42,7 +46,7 @@
           <span class="generate-label generate-label-mobile">生成图片</span>
           <span class="generate-label generate-label-busy" hidden>生成中</span>
         </button>
-        <button class="icon-button" id="reset-map" type="button" aria-label="重置版图" title="重置版图">↺</button>
+        <button class="icon-button reset-map-button" id="reset-map" type="button" aria-label="重置版图" title="重置版图">↺</button>
       </div>
       <div class="toolbar-tools">
         <label class="tag-toggle">
@@ -113,7 +117,7 @@
 
   <script src="./site-config.js?v=20260520-soft-signature"></script>
   <script src="./data.js?v=20260520-alittletea"></script>
-  <script src="./app.js?v=20260828-desktop-centered"></script>
+  <script src="./app.js?v=20260828-persistent-result"></script>
   <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "68a6fc08dfd944b3b8eae0c2a33bb4e5"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

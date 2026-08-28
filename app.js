@@ -15,6 +15,7 @@
   const isWeChatBrowser = /MicroMessenger/i.test(navigator.userAgent || "");
   const storageKey = "milkTeaMap:v1";
   const uiStorageKey = "milkTeaMap:ui:v1";
+  const generatedStorageKey = "milkTeaMap:generated:v1";
   const compactMapMedia = window.matchMedia ? window.matchMedia("(max-width: 640px)") : { matches: false };
   const desktopLayoutMedia = window.matchMedia ? window.matchMedia("(min-width: 1024px)") : { matches: false };
   const assetVersion = "20260520-shandong-color-unified";
@@ -233,6 +234,7 @@
   const appShell = document.querySelector(".app-shell");
   const resultBand = document.querySelector("#result-band");
   const generateMapButtons = document.querySelectorAll(".generate-map-button");
+  const resetMapButtons = document.querySelectorAll(".reset-map-button");
   const shareBand = document.querySelector("#share-band");
   const sharePreview = document.querySelector("#share-preview");
   const downloadImage = document.querySelector("#download-image");
@@ -252,7 +254,7 @@
   let mapPaintToken = 0;
   let provinceFocusToken = 0;
   let mapMarkerToken = 0;
-  let hasGeneratedResult = false;
+  let hasGeneratedResult = loadGeneratedResultState();
 
   normalizeSiteConfigUrls();
   configureSiteChrome();
@@ -269,11 +271,13 @@
   mapBoard.addEventListener("click", handleMapBoardClick);
 
   generateMapButtons.forEach((button) => button.addEventListener("click", handleGenerateMap));
+  resetMapButtons.forEach((button) => button.addEventListener("click", handleResetMap));
 
   async function handleGenerateMap(event) {
     const button = event.currentTarget;
     const busyLabel = button.querySelector(".generate-label-busy");
     hasGeneratedResult = true;
+    saveGeneratedResultState();
     syncGeneratedResultVisibility();
     renderSummary();
     button.classList.add("is-busy");
@@ -295,15 +299,20 @@
     }
   }
 
-  document.querySelector("#reset-map").addEventListener("click", () => {
+  function handleResetMap() {
     if (!confirm("清空当前奶茶版图？")) return;
     state = {};
-    saveState();
+    clearState();
     activeProvinceId = null;
-    invalidateGeneratedResult();
+    hasGeneratedResult = false;
+    saveGeneratedResultState();
+    shareBand.hidden = true;
+    sharePreview.removeAttribute("src");
+    downloadImage.removeAttribute("href");
+    syncGeneratedResultVisibility();
     renderMap();
     renderSummary();
-  });
+  }
 
   document.querySelectorAll(".status-button").forEach((button) => {
     button.addEventListener("click", () => {
@@ -667,6 +676,34 @@
       localStorage.setItem(storageKey, JSON.stringify(state));
     } catch (error) {
       // Some embedded file:// browsers block storage writes. Keep the in-memory state usable.
+    }
+  }
+
+  function clearState() {
+    try {
+      localStorage.removeItem(storageKey);
+    } catch (error) {
+      // 本地存储不可用时，内存中的空状态仍会立即生效。
+    }
+  }
+
+  function loadGeneratedResultState() {
+    try {
+      return localStorage.getItem(generatedStorageKey) === "1";
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function saveGeneratedResultState() {
+    try {
+      if (hasGeneratedResult) {
+        localStorage.setItem(generatedStorageKey, "1");
+      } else {
+        localStorage.removeItem(generatedStorageKey);
+      }
+    } catch (error) {
+      // 存储不可用时仍保留当前页面内的生成状态。
     }
   }
 
@@ -2505,15 +2542,9 @@
     }
 
     saveState();
-    invalidateGeneratedResult();
+    if (desktopLayoutMedia.matches && hasGeneratedResult) shareBand.hidden = true;
     renderMap();
     renderSummary();
-  }
-
-  function invalidateGeneratedResult() {
-    hasGeneratedResult = false;
-    syncGeneratedResultVisibility();
-    if (desktopLayoutMedia.matches) shareBand.hidden = true;
   }
 
   function syncGeneratedResultVisibility() {

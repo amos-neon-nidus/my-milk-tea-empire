@@ -186,7 +186,10 @@ a {
   order: 1;
 }
 
-.desktop-generate-button {
+.desktop-hero-actions,
+.desktop-generate-button,
+.desktop-reset-button,
+.generate-label-regenerate {
   display: none;
 }
 
@@ -196,6 +199,7 @@ a {
 }
 
 .generate-map-button.is-busy .generate-label-desktop,
+.generate-map-button.is-busy .generate-label-regenerate,
 .generate-map-button.is-busy .generate-label-mobile {
   display: none;
 }
@@ -1530,10 +1534,46 @@ a {
     grid-area: score;
   }
 
-  .desktop-generate-button {
+  .desktop-hero-actions {
     grid-area: generate;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .desktop-generate-button {
     display: inline-flex;
     min-height: 40px;
+  }
+
+  .app-shell.has-generated-result .desktop-hero-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .app-shell.has-generated-result .desktop-reset-button {
+    display: inline-flex;
+    min-height: 40px;
+    padding: 0 4px;
+    background: #fffdf5;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .app-shell.has-generated-result .desktop-generate-button {
+    padding: 0 4px;
+    font-size: 12px;
+  }
+
+  .app-shell.has-generated-result .desktop-generate-button .generate-label-desktop {
+    display: none;
+  }
+
+  .app-shell.has-generated-result .desktop-generate-button .generate-label-regenerate {
+    display: inline;
+  }
+
+  .app-shell.has-generated-result .desktop-generate-button.is-busy .generate-label-regenerate {
+    display: none;
   }
 
   .hero-copy h1 {
