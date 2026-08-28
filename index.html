@@ -14,7 +14,7 @@
   <meta name="twitter:title" content="我的奶茶版图">
   <meta name="twitter:description" content="点亮喝过、想喝和本命奶茶，生成你的奶茶人格分享图。">
   <meta name="twitter:image" content="./assets/china-map-wide.png">
-  <link rel="stylesheet" href="./styles.css?v=20260828-desktop-balanced">
+  <link rel="stylesheet" href="./styles.css?v=20260828-desktop-centered">
 </head>
 <body>
   <main class="app-shell">
@@ -29,11 +29,15 @@
         <span><strong id="province-count">0</strong> 发源地</span>
         <span><strong id="want-count">0</strong> 想喝</span>
       </div>
+      <button class="tool-button generate-map-button desktop-generate-button" type="button">
+        <span class="generate-label generate-label-desktop">生成奶茶版图</span>
+        <span class="generate-label generate-label-busy" hidden>生成中</span>
+      </button>
     </section>
 
     <section class="toolbar-band" aria-label="版图操作">
       <div class="toolbar-primary">
-        <button class="tool-button" id="generate-map" type="button">
+        <button class="tool-button generate-map-button" id="generate-map" type="button">
           <span class="generate-label generate-label-desktop">生成奶茶版图</span>
           <span class="generate-label generate-label-mobile">生成图片</span>
           <span class="generate-label generate-label-busy" hidden>生成中</span>
@@ -58,7 +62,7 @@
       </div>
     </section>
 
-    <section class="result-band" id="result-band" aria-live="polite">
+    <section class="result-band is-awaiting-generation" id="result-band" aria-live="polite">
       <div class="result-heading">
         <p class="eyebrow">奶茶人格</p>
         <h2 id="persona-title">奶茶人格等待第一杯唤醒</h2>
@@ -109,7 +113,7 @@
 
   <script src="./site-config.js?v=20260520-soft-signature"></script>
   <script src="./data.js?v=20260520-alittletea"></script>
-  <script src="./app.js?v=20260520-signature-https"></script>
+  <script src="./app.js?v=20260828-desktop-centered"></script>
   <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "68a6fc08dfd944b3b8eae0c2a33bb4e5"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

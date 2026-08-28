@@ -16,6 +16,7 @@
   const storageKey = "milkTeaMap:v1";
   const uiStorageKey = "milkTeaMap:ui:v1";
   const compactMapMedia = window.matchMedia ? window.matchMedia("(max-width: 640px)") : { matches: false };
+  const desktopLayoutMedia = window.matchMedia ? window.matchMedia("(min-width: 1024px)") : { matches: false };
   const assetVersion = "20260520-shandong-color-unified";
   const rankNames = { top1: "本命", top2: "常驻", top3: "心头好" };
   const rankMarks = { top1: "1", top2: "2", top3: "3" };
@@ -229,6 +230,9 @@
   const personaTags = document.querySelector("#persona-tags");
   const topList = document.querySelector("#top-list");
   const achievementGrid = document.querySelector("#achievement-grid");
+  const appShell = document.querySelector(".app-shell");
+  const resultBand = document.querySelector("#result-band");
+  const generateMapButtons = document.querySelectorAll(".generate-map-button");
   const shareBand = document.querySelector("#share-band");
   const sharePreview = document.querySelector("#share-preview");
   const downloadImage = document.querySelector("#download-image");
@@ -248,6 +252,7 @@
   let mapPaintToken = 0;
   let provinceFocusToken = 0;
   let mapMarkerToken = 0;
+  let hasGeneratedResult = false;
 
   normalizeSiteConfigUrls();
   configureSiteChrome();
@@ -255,12 +260,22 @@
   configureMarkerEditor();
   renderMap();
   renderSummary();
+  syncGeneratedResultVisibility();
+
+  if (desktopLayoutMedia.addEventListener) {
+    desktopLayoutMedia.addEventListener("change", syncGeneratedResultVisibility);
+  }
 
   mapBoard.addEventListener("click", handleMapBoardClick);
 
-  document.querySelector("#generate-map").addEventListener("click", async (event) => {
+  generateMapButtons.forEach((button) => button.addEventListener("click", handleGenerateMap));
+
+  async function handleGenerateMap(event) {
     const button = event.currentTarget;
     const busyLabel = button.querySelector(".generate-label-busy");
+    hasGeneratedResult = true;
+    syncGeneratedResultVisibility();
+    renderSummary();
     button.classList.add("is-busy");
     if (busyLabel) busyLabel.hidden = false;
     button.disabled = true;
@@ -270,19 +285,22 @@
       downloadImage.href = url;
       downloadImage.textContent = isWeChatBrowser ? "长按图片保存" : "保存 PNG";
       shareBand.hidden = false;
-      shareBand.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (compactMapMedia.matches) {
+        shareBand.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     } finally {
       button.disabled = false;
       if (busyLabel) busyLabel.hidden = true;
       button.classList.remove("is-busy");
     }
-  });
+  }
 
   document.querySelector("#reset-map").addEventListener("click", () => {
     if (!confirm("清空当前奶茶版图？")) return;
     state = {};
     saveState();
     activeProvinceId = null;
+    invalidateGeneratedResult();
     renderMap();
     renderSummary();
   });
@@ -2487,8 +2505,21 @@
     }
 
     saveState();
+    invalidateGeneratedResult();
     renderMap();
     renderSummary();
+  }
+
+  function invalidateGeneratedResult() {
+    hasGeneratedResult = false;
+    syncGeneratedResultVisibility();
+    if (desktopLayoutMedia.matches) shareBand.hidden = true;
+  }
+
+  function syncGeneratedResultVisibility() {
+    const showDesktopResult = desktopLayoutMedia.matches && hasGeneratedResult;
+    appShell.classList.toggle("has-generated-result", showDesktopResult);
+    resultBand.classList.toggle("is-awaiting-generation", desktopLayoutMedia.matches && !hasGeneratedResult);
   }
 
   function renderSummary() {

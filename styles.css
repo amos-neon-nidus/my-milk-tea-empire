@@ -186,17 +186,21 @@ a {
   order: 1;
 }
 
+.desktop-generate-button {
+  display: none;
+}
+
 .generate-label-mobile,
 .generate-label-busy {
   display: none;
 }
 
-#generate-map.is-busy .generate-label-desktop,
-#generate-map.is-busy .generate-label-mobile {
+.generate-map-button.is-busy .generate-label-desktop,
+.generate-map-button.is-busy .generate-label-mobile {
   display: none;
 }
 
-#generate-map.is-busy .generate-label-busy {
+.generate-map-button.is-busy .generate-label-busy {
   display: inline;
 }
 
@@ -1475,56 +1479,85 @@ a {
   }
 }
 
-/* 桌面端保持地图原始比例，以等宽双栏平衡地图与信息区。 */
+/* 桌面端将浓度检测与地图上下拼接，地图继续保持原始比例。 */
 @media (min-width: 1024px) {
   .app-shell {
+    position: relative;
     width: fit-content;
     max-width: calc(100vw - 24px);
-    min-height: 100vh;
-    min-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, min(44vw, calc((100vh - 24px) * 4 / 5))));
-    grid-template-columns: repeat(2, minmax(0, min(44vw, calc((100dvh - 24px) * 4 / 5))));
-    grid-template-rows: auto auto auto minmax(0, 1fr);
+    grid-template-columns:
+      minmax(0, min(44vw, calc((100vh - 156px) * 4 / 5)))
+      minmax(0, min(44vw, 640px));
+    grid-template-columns:
+      minmax(0, min(44vw, calc((100dvh - 156px) * 4 / 5)))
+      minmax(0, min(44vw, 640px));
+    grid-template-rows: auto minmax(0, 1fr);
     grid-template-areas:
-      "map hero"
-      "map toolbar"
-      "map result"
-      "map .";
+      "hero toolbar"
+      "map result";
     gap: 10px 20px;
     padding: 12px;
   }
 
+  .app-shell:not(.has-generated-result) {
+    grid-template-columns: minmax(0, min(44vw, calc((100vh - 156px) * 4 / 5)));
+    grid-template-columns: minmax(0, min(44vw, calc((100dvh - 156px) * 4 / 5)));
+    grid-template-areas:
+      "hero"
+      "map";
+  }
+
   .hero-band {
     grid-area: hero;
-    grid-template-columns: 1fr;
-    align-items: stretch;
-    gap: 10px;
-    padding: 14px;
+    grid-template-columns: minmax(0, 1fr) minmax(176px, .64fr);
+    grid-template-areas:
+      "copy score"
+      "copy generate";
+    align-items: end;
+    gap: 8px 12px;
+    padding: 12px 14px;
     border-radius: 16px;
   }
 
+  .hero-copy {
+    grid-area: copy;
+  }
+
+  .hero-band .score-strip {
+    grid-area: score;
+  }
+
+  .desktop-generate-button {
+    grid-area: generate;
+    display: inline-flex;
+    min-height: 40px;
+  }
+
   .hero-copy h1 {
-    font-size: clamp(44px, 3.8vw, 60px);
+    font-size: clamp(36px, 2.6vw, 48px);
   }
 
   .gravity-note {
-    margin-top: 6px;
-    font-size: 13px;
-    line-height: 1.45;
+    margin-top: 5px;
+    font-size: 11px;
+    line-height: 1.4;
   }
 
   .score-strip span {
-    padding: 7px 6px;
-    font-size: 12px;
+    padding: 6px 4px;
+    font-size: 11px;
   }
 
   .score-strip strong {
-    font-size: 30px;
+    font-size: 26px;
   }
 
   .toolbar-band {
     grid-area: toolbar;
+    display: none;
     grid-template-columns: 160px minmax(0, 1fr) 44px;
     width: 100%;
     gap: 8px;
@@ -1557,18 +1590,18 @@ a {
 
   .map-scroll {
     width: 100%;
-    height: auto;
+    height: 100%;
     min-height: 0;
-    align-items: flex-start;
+    align-items: center;
     padding: 0;
   }
 
   .map-board {
-    flex: 0 0 100%;
-    width: 100%;
-    height: auto;
+    flex: 0 1 auto;
+    width: auto;
+    height: 100%;
     max-width: 100%;
-    max-height: none;
+    max-height: 100%;
     aspect-ratio: 720 / 900;
   }
 
@@ -1578,7 +1611,12 @@ a {
     align-self: start;
     margin-top: 0;
     padding: 14px;
-    overflow: visible;
+    max-height: 100%;
+    overflow: auto;
+  }
+
+  .result-band.is-awaiting-generation {
+    display: none;
   }
 
   .result-heading h2 {
@@ -1644,7 +1682,10 @@ a {
   }
 
   .share-band {
-    grid-column: 1 / -1;
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 12px;
+    left: 12px;
     margin-top: 0;
   }
 }
